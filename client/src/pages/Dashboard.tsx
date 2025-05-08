@@ -35,11 +35,7 @@ export default function Dashboard() {
       <Header />
 
       <main className="container mx-auto px-2 py-2 flex-grow">
-        {/* Dashboard Header */}
-        <div className="text-center mb-2">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">Employment Data Visualization</h1>
-          <p className="text-gray-400 text-sm">Interactive dashboard for exploring job market trends</p>
-        </div>
+        {/* Dashboard Header - Removed to save space */}
 
         {/* Visualization Controls */}
         <div className="relative z-10 mb-2">
@@ -59,13 +55,10 @@ export default function Dashboard() {
         )}
 
         {/* All Visualizations in a compact grid layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 h-[calc(100vh-16rem)]">
-          {/* Row 1: 3 charts */}
-          <SalaryExperienceBoxPlot
-            data={visualizationData?.boxPlot}
-            isLoading={isLoading}
-          />
-
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 h-[calc(100vh-5rem)]">
+          {/* Main visualizations in a 4x2 grid */}
+          
+          {/* Row 1: 4 charts */}
           <SalaryLocationIndustryBarChart
             data={visualizationData?.groupedBar}
             isLoading={isLoading}
@@ -75,45 +68,28 @@ export default function Dashboard() {
             data={visualizationData?.ridgeline}
             isLoading={isLoading}
           />
-
-          {/* Row 2: 3 charts with map taking 2 columns */}
+          
           <SalaryPostingDateScatter
             data={visualizationData?.scatterPlot}
             isLoading={isLoading}
           />
-
-          <div className="md:col-span-2">
-            <GeographicMapChart 
-              isLoading={isLoading}
-            />
-          </div>
-
-          {/* Row 3: 3 charts */}
+          
           <JobCountStackedBar
             data={visualizationData?.stackedBar}
             isLoading={isLoading}
           />
 
+          {/* Row 2: 2 charts - map spanning 3 columns and timeline */}
+          <div className="md:col-span-3">
+            <GeographicMapChart 
+              isLoading={isLoading}
+            />
+          </div>
+          
           <JobPostingsTimeLine
             data={visualizationData?.timeLine}
             isLoading={isLoading}
           />
-
-          {/* Additional space for future visualization if needed */}
-          <div className="hidden md:block bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
-            <div className="p-2 border-b border-gray-700">
-              <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                Future Insights
-              </h3>
-            </div>
-            <div className="flex-grow flex items-center justify-center">
-              <div className="text-center p-4">
-                <div className="text-gray-400 text-xs">
-                  Additional visualization space
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
