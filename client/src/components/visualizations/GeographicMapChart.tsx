@@ -767,120 +767,102 @@ export default function GeographicMapChart({ isLoading }: GeographicMapChartProp
   
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 col-span-1 lg:col-span-2">
-        <div className="p-4 border-b border-gray-700">
-          <Skeleton className="h-6 w-3/4 bg-gray-700" />
-          <Skeleton className="h-4 w-1/2 mt-2 bg-gray-700" />
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col md:col-span-2">
+        <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+          <Skeleton className="h-5 w-1/3 bg-gray-700" />
+          <div className="flex items-center space-x-1">
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+          </div>
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-end mb-4 space-x-2">
-            <Skeleton className="h-6 w-20 bg-gray-700" />
-            <Skeleton className="h-6 w-20 bg-gray-700" />
-            <Skeleton className="h-6 w-20 bg-gray-700" />
-          </div>
-          <Skeleton className="h-80 sm:h-96 w-full bg-gray-700" />
-          <div className="mt-4">
-            <Skeleton className="h-3 w-full bg-gray-700" />
-            <Skeleton className="h-3 w-4/5 mt-2 bg-gray-700" />
-          </div>
+        <div className="p-2 flex-grow">
+          <Skeleton className="h-full w-full bg-gray-700/50 rounded" />
         </div>
       </div>
     );
   }
   
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 col-span-1 lg:col-span-2">
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-semibold flex items-center text-white">
-          <span className="material-icons text-cyan-400 mr-2">public</span>
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-            Geographic Job Distribution
-          </span>
-        </h2>
-        <p className="text-sm text-gray-400">
-          Interactive map visualization of global job market data
-        </p>
-      </div>
-      <div className="p-4">
-        <div className="flex items-center justify-end mb-4 space-x-2">
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col md:col-span-2">
+      <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+        <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          Geographic Distribution
+        </h3>
+        <div className="flex items-center gap-1">
           <Button
-            variant="outline"
             size="sm"
-            className={`${
-              dataType === 'jobCount'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${dataType === 'jobCount' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setDataType('jobCount')}
           >
-            Job Count
+            Jobs
           </Button>
           <Button
-            variant="outline"
             size="sm"
-            className={`${
-              dataType === 'avgSalary'
-                ? 'bg-emerald-900/50 text-emerald-400 border-emerald-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-emerald-800/30 hover:text-emerald-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${dataType === 'avgSalary' ? 'bg-emerald-900/30 text-emerald-400' : 'text-gray-400'}`}
             onClick={() => setDataType('avgSalary')}
           >
-            Average Salary
+            Salary
           </Button>
           <Button
-            variant="outline"
             size="sm"
-            className={`${
-              dataType === 'growthRate'
-                ? 'bg-amber-900/50 text-amber-400 border-amber-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-amber-800/30 hover:text-amber-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${dataType === 'growthRate' ? 'bg-amber-900/30 text-amber-400' : 'text-gray-400'}`}
             onClick={() => setDataType('growthRate')}
           >
-            Job Growth
+            Growth
           </Button>
         </div>
-        <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className={`lg:col-span-${selectedRegion ? 2 : 3}`}>
-            <svg 
-              ref={svgRef} 
-              className="h-80 sm:h-96 w-full border border-gray-700 rounded-lg"
-              style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}
-            ></svg>
-            <div 
-              ref={tooltipRef}
-              className="absolute opacity-0 bg-gray-900 p-3 rounded shadow-xl border border-gray-700 text-sm pointer-events-none z-10"
-            ></div>
-          </div>
-          
-          {selectedRegion && (
-            <div 
-              ref={detailsRef}
-              className="bg-gray-900/90 backdrop-blur-sm rounded-lg border border-gray-700 p-4 h-80 sm:h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900"
-            >
-              {/* Details content will be populated in useEffect */}
+      </div>
+      <div className="p-2 flex-grow">
+        <div className="h-full relative">
+          {selectedRegion ? (
+            <div className="grid h-full grid-cols-1 md:grid-cols-3 gap-2">
+              <div className="md:col-span-2 h-full">
+                <svg 
+                  ref={svgRef} 
+                  width="100%"
+                  height="100%"
+                  className="bg-gray-800/30 rounded"
+                ></svg>
+              </div>
+              <div 
+                ref={detailsRef}
+                className="bg-gray-900/90 backdrop-blur-sm rounded border border-gray-700 p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900"
+              >
+                {/* Details populated in useEffect */}
+              </div>
             </div>
+          ) : (
+            <>
+              <svg 
+                ref={svgRef} 
+                width="100%"
+                height="100%"
+                className="bg-gray-800/30 rounded"
+              ></svg>
+              <div 
+                ref={tooltipRef}
+                className="absolute opacity-0 bg-gray-900 p-2 rounded shadow-xl border border-gray-700 text-xs pointer-events-none z-10"
+              ></div>
+            </>
           )}
-        </div>
-        <div className="mt-4 text-xs text-gray-400">
-          <p>Hover over regions to see statistics. Click on a region to view detailed industry and position breakdowns.</p>
         </div>
         
         {selectedRegion && (
-          <div className="mt-4 bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-            <h3 className="text-sm font-medium text-white mb-2">Trending in {selectedRegion}</h3>
-            <div className="flex flex-wrap gap-2">
-              {mapData.regions[selectedRegion].topIndustries.slice(0, 3).map(industry => (
-                <Badge key={industry.name} variant="outline" className="bg-blue-900/30 text-blue-300 border-blue-700">
-                  {industry.name}
-                </Badge>
-              ))}
-              {mapData.regions[selectedRegion].topPositions.slice(0, 2).map(position => (
-                <Badge key={position.title} variant="outline" className="bg-emerald-900/30 text-emerald-300 border-emerald-700">
-                  {position.title}
-                </Badge>
-              ))}
-            </div>
+          <div className="mt-2 bg-gray-800/30 rounded p-2 border border-gray-700 flex flex-wrap gap-1">
+            {mapData.regions[selectedRegion].topIndustries.slice(0, 2).map(industry => (
+              <Badge key={industry.name} variant="outline" className="bg-blue-900/20 text-blue-300 border-blue-700 text-xs">
+                {industry.name}
+              </Badge>
+            ))}
+            {mapData.regions[selectedRegion].topPositions.slice(0, 1).map(position => (
+              <Badge key={position.title} variant="outline" className="bg-emerald-900/20 text-emerald-300 border-emerald-700 text-xs">
+                {position.title}
+              </Badge>
+            ))}
           </div>
         )}
       </div>
