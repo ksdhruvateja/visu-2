@@ -34,34 +34,33 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-950 to-gray-900 text-white">
       <Header />
 
-      <main className="container mx-auto px-4 py-6 flex-grow">
+      <main className="container mx-auto px-2 py-2 flex-grow">
         {/* Dashboard Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">Employment Data Visualization</h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">Interactive dashboard for exploring job market trends with advanced data visualizations</p>
+        <div className="text-center mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 text-transparent bg-clip-text">Employment Data Visualization</h1>
+          <p className="text-gray-400 text-sm">Interactive dashboard for exploring job market trends</p>
         </div>
 
         {/* Visualization Controls */}
-        <div className="relative z-10 mb-6">
-          <div className="backdrop-blur-sm bg-gray-900/40 rounded-xl p-4 border border-gray-800 shadow-lg">
-            <FilterControls
-              onFilterChange={handleFilterChange}
-              locations={locations || []}
-              isLoading={isLoading}
-            />
-          </div>
+        <div className="relative z-10 mb-2">
+          <FilterControls
+            onFilterChange={handleFilterChange}
+            locations={locations || []}
+            isLoading={isLoading}
+          />
         </div>
 
         {/* Error message */}
         {error && (
-          <div className="bg-red-900/60 border border-red-700 text-red-200 px-4 py-3 rounded-xl relative mb-6 backdrop-blur-sm">
+          <div className="bg-red-900/60 border border-red-700 text-red-200 px-4 py-2 rounded-xl relative mb-2 backdrop-blur-sm text-sm">
             <strong className="font-bold">Error:</strong>
-            <span className="block sm:inline"> {error}</span>
+            <span className="ml-1"> {error}</span>
           </div>
         )}
 
-        {/* All Visualizations in a single section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* All Visualizations in a compact grid layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 h-[calc(100vh-16rem)]">
+          {/* Row 1: 3 charts */}
           <SalaryExperienceBoxPlot
             data={visualizationData?.boxPlot}
             isLoading={isLoading}
@@ -77,11 +76,19 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
 
+          {/* Row 2: 3 charts with map taking 2 columns */}
           <SalaryPostingDateScatter
             data={visualizationData?.scatterPlot}
             isLoading={isLoading}
           />
 
+          <div className="md:col-span-2">
+            <GeographicMapChart 
+              isLoading={isLoading}
+            />
+          </div>
+
+          {/* Row 3: 3 charts */}
           <JobCountStackedBar
             data={visualizationData?.stackedBar}
             isLoading={isLoading}
@@ -92,11 +99,18 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
 
-          {/* Geographic Map Visualization - Make it full width */}
-          <div className="lg:col-span-2">
-            <GeographicMapChart 
-              isLoading={isLoading}
-            />
+          {/* Additional space for future visualization if needed */}
+          <div className="hidden md:block bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg border border-gray-700 p-4">
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-xl font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text mb-2">
+                  Future Insights
+                </div>
+                <p className="text-gray-400 text-sm">
+                  Additional visualization space
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </main>

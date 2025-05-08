@@ -256,68 +256,51 @@ export default function SalaryExperienceBoxPlot({ data, isLoading }: SalaryExper
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-semibold flex items-center text-white">
-          <span className="material-icons text-cyan-400 mr-2">bar_chart</span>
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-            Salary vs. Experience Level
-          </span>
-        </h2>
-        <p className="text-sm text-gray-400">Box plot showing salary distributions by experience level</p>
-      </div>
-      <div className="p-4">
-        <div className="flex items-center justify-end mb-4 space-x-2">
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+      <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+        <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          Salary by Experience
+        </h3>
+        
+        <div className="flex items-center space-x-1">
           <Button 
             size="sm"
-            variant="outline"
-            className={`${
-              activeFilter === 'Median'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${activeFilter === 'Median' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setActiveFilter('Median')}
           >
             Median
           </Button>
           <Button 
             size="sm"
-            variant="outline"
-            className={`${
-              activeFilter === 'Quartiles'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${activeFilter === 'Quartiles' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setActiveFilter('Quartiles')}
           >
             Quartiles
           </Button>
           <Button 
             size="sm"
-            variant="outline"
-            className={`${
-              activeFilter === 'Outliers'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${activeFilter === 'Outliers' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setActiveFilter('Outliers')}
           >
             Outliers
           </Button>
         </div>
-        <div className="relative">
+      </div>
+      <div className="p-2 flex-grow">
+        <div className="relative w-full h-full">
           <svg 
             ref={svgRef} 
-            className="h-64 sm:h-80 w-full border border-gray-700 rounded-lg bg-gray-800"
+            width="100%" 
+            height="100%" 
+            className="bg-gray-800/30 rounded"
           ></svg>
           <div 
             ref={tooltipRef}
-            className="absolute opacity-0 bg-gray-900 p-3 rounded shadow-xl border border-gray-700 text-sm pointer-events-none z-10 text-white"
+            className="absolute opacity-0 bg-gray-900 p-2 rounded shadow-xl border border-gray-700 text-xs pointer-events-none z-10 text-white"
           ></div>
-        </div>
-        <div className="mt-4 text-xs text-gray-400">
-          <p>Hover over boxes to see detailed salary information for each experience level.</p>
-          <p>Click on outliers to view specific job details.</p>
         </div>
       </div>
     </div>
