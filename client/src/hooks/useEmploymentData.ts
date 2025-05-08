@@ -36,7 +36,14 @@ const useEmploymentData = (filters: FilterOptions) => {
     limit: '20'
   });
 
-  const { data, isLoading, error } = useQuery({
+  interface ApiResponse {
+    jobs: JobListing[];
+    hasMore: boolean;
+    locations: string[];
+    stats: DashboardStats;
+  }
+
+  const { data, isLoading, error } = useQuery<ApiResponse>({
     queryKey: [`/api/employment-data?${fetchParams.toString()}`],
     refetchOnWindowFocus: false,
   });

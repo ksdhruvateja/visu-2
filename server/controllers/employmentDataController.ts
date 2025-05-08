@@ -29,11 +29,19 @@ export const getEmploymentData = async (req: Request, res: Response) => {
 
     // Read CSV data if not cached
     if (!cachedData) {
-      const csvPath = path.resolve(process.cwd(), 'attached_assets/employment_dataset.csv');
-      cachedData = await readEmploymentData(csvPath);
-      
-      // Extract unique locations for filter dropdown
-      cachedLocations = [...new Set(cachedData.map(job => job.location))];
+      try {
+        const csvPath = path.resolve(process.cwd(), 'attached_assets/employment_dataset.csv');
+        console.log("Loading CSV file from:", csvPath);
+        cachedData = await readEmploymentData(csvPath);
+        console.log(`Successfully loaded ${cachedData.length} job listings`);
+        
+        // Extract unique locations for filter dropdown
+        cachedLocations = Array.from(new Set(cachedData.map(job => job.location)));
+      } catch (err) {
+        console.error("Error loading employment data:", err);
+        cachedData = [];
+        cachedLocations = [];
+      }
     }
 
     // Apply filters
