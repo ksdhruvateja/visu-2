@@ -29,12 +29,44 @@ const useEmploymentData = (filters: FilterOptions) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreJobs, setHasMoreJobs] = useState(true);
   
-  const fetchParams = new URLSearchParams({
-    experienceLevel: filters.experienceLevel,
-    location: filters.location,
-    page: currentPage.toString(),
-    limit: '20'
-  });
+  const buildFetchParams = () => {
+    const params = new URLSearchParams({
+      page: currentPage.toString(),
+      limit: '20'
+    });
+    
+    // Add experience levels if any are selected
+    if (filters.experienceLevels && filters.experienceLevels.length > 0) {
+      filters.experienceLevels.forEach(level => {
+        params.append('experienceLevels', level);
+      });
+    }
+    
+    // Add locations if any are selected
+    if (filters.locations && filters.locations.length > 0) {
+      filters.locations.forEach(location => {
+        params.append('locations', location);
+      });
+    }
+    
+    // Add industries if any are selected
+    if (filters.industries && filters.industries.length > 0) {
+      filters.industries.forEach(industry => {
+        params.append('industries', industry);
+      });
+    }
+    
+    // Add employment types if any are selected
+    if (filters.employmentTypes && filters.employmentTypes.length > 0) {
+      filters.employmentTypes.forEach(type => {
+        params.append('employmentTypes', type);
+      });
+    }
+    
+    return params;
+  };
+  
+  const fetchParams = buildFetchParams();
 
   interface ApiResponse {
     jobs: JobListing[];

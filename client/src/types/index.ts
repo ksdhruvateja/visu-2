@@ -27,8 +27,10 @@ export interface DashboardStats {
 }
 
 export interface FilterOptions {
-  experienceLevel: string;
-  location: string;
+  experienceLevels: string[];
+  locations: string[];
+  industries: string[];
+  employmentTypes: string[];
 }
 
 export interface VisualizationData {

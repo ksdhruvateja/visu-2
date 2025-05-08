@@ -13,8 +13,10 @@ import useEmploymentData from "@/hooks/useEmploymentData";
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<FilterOptions>({
-    experienceLevel: "All Levels",
-    location: "All Locations",
+    experienceLevels: [],
+    locations: [],
+    industries: [],
+    employmentTypes: [],
   });
 
   const {

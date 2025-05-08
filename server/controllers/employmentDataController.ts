@@ -19,8 +19,10 @@ export const getEmploymentData = async (req: Request, res: Response) => {
   try {
     // Get query parameters
     const { 
-      experienceLevel = 'All Levels', 
-      location = 'All Locations',
+      experienceLevels,
+      locations,
+      industries,
+      employmentTypes,
       page = '1',
       limit = '20'
     } = req.query;
@@ -66,11 +68,30 @@ export const getEmploymentData = async (req: Request, res: Response) => {
       }
     }
 
+    // Convert arrays to string arrays or empty arrays if undefined
+    const expLevels = Array.isArray(experienceLevels) 
+      ? experienceLevels as string[] 
+      : experienceLevels ? [experienceLevels as string] : [];
+      
+    const locs = Array.isArray(locations) 
+      ? locations as string[] 
+      : locations ? [locations as string] : [];
+      
+    const inds = Array.isArray(industries) 
+      ? industries as string[] 
+      : industries ? [industries as string] : [];
+      
+    const empTypes = Array.isArray(employmentTypes) 
+      ? employmentTypes as string[] 
+      : employmentTypes ? [employmentTypes as string] : [];
+
     // Apply filters
     const filteredData = filterData(
-      cachedData, 
-      experienceLevel as string, 
-      location as string
+      cachedData,
+      expLevels,
+      locs,
+      inds,
+      empTypes
     );
 
     // Paginate results
@@ -98,23 +119,39 @@ export const getEmploymentData = async (req: Request, res: Response) => {
 // Filter data based on user selections
 const filterData = (
   data: JobListing[],
-  experienceLevel: string,
-  location: string
+  experienceLevels: string[],
+  locations: string[],
+  industries: string[],
+  employmentTypes: string[]
 ): FilteredData => {
   // Start with all data
   let filteredData = [...data];
 
-  // Apply experience level filter
-  if (experienceLevel !== 'All Levels') {
+  // Apply experience level filters
+  if (experienceLevels.length > 0) {
     filteredData = filteredData.filter(
-      job => job.experienceLevel === experienceLevel
+      job => experienceLevels.includes(job.experienceLevel)
     );
   }
 
-  // Apply location filter
-  if (location !== 'All Locations') {
+  // Apply location filters
+  if (locations.length > 0) {
     filteredData = filteredData.filter(
-      job => job.location === location
+      job => locations.includes(job.location)
+    );
+  }
+  
+  // Apply industry filters
+  if (industries.length > 0) {
+    filteredData = filteredData.filter(
+      job => industries.includes(job.industry)
+    );
+  }
+  
+  // Apply employment type filters
+  if (employmentTypes.length > 0) {
+    filteredData = filteredData.filter(
+      job => employmentTypes.includes(job.employmentType)
     );
   }
 
