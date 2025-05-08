@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { StackedBarData } from '@/types';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
+import { StackedBarData } from '../../types';
+import { Skeleton } from '../../components/ui/skeleton';
+import { Button } from '../../components/ui/button';
 
 interface JobCountStackedBarProps {
   data: StackedBarData | undefined;

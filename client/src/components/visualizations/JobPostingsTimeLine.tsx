@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { TimeLineData } from '@/types';
+import { TimeLineData } from '../../types';
 import { format, parseISO } from 'date-fns';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
+import { Skeleton } from '../../components/ui/skeleton';
+import { Button } from '../../components/ui/button';
 
 interface JobPostingsTimeLineProps {
   data: TimeLineData | undefined;

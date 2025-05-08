@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { ScatterPlotData } from '@/types';
-import { formatCurrency, formatDate } from "@/lib/utils/data";
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
+import { ScatterPlotData } from '../../types';
+import { formatCurrency, formatDate } from "../../lib/utils/data";
+import { Skeleton } from '../../components/ui/skeleton';
+import { Button } from '../../components/ui/button';
 
 interface SalaryPostingDateScatterProps {
   data: ScatterPlotData | undefined;

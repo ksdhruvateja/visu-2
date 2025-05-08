@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { GroupedBarData } from '@/types';
-import { formatCurrency } from "@/lib/utils/data";
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { GroupedBarData } from '../../types';
+import { formatCurrency } from "../../lib/utils/data";
+import { Skeleton } from '../../components/ui/skeleton';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
 
 interface SalaryLocationIndustryBarChartProps {
   data: GroupedBarData | undefined;

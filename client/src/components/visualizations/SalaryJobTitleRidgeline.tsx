@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { RidgelineData } from '@/types';
-import { formatCurrency } from "@/lib/utils/data";
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
+import { RidgelineData } from '../../types';
+import { formatCurrency } from "../../lib/utils/data";
+import { Skeleton } from '../../components/ui/skeleton';
+import { Button } from '../../components/ui/button';
 
 interface SalaryJobTitleRidgelineProps {
   data: RidgelineData | undefined;

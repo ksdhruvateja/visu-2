@@ -11,7 +11,7 @@ import {
   StackedBarData, 
   TimeLineData,
   VisualizationData
-} from "@/types";
+} from "../types";
 import { 
   processBoxPlotData, 
   processGroupedBarData, 
@@ -19,7 +19,7 @@ import {
   processScatterPlotData, 
   processStackedBarData, 
   processTimeLineData 
-} from "@/lib/utils/data";
+} from "../lib/utils/data";
 
 const useEmploymentData = (filters: FilterOptions) => {
   const [jobListings, setJobListings] = useState<JobListing[]>([]);

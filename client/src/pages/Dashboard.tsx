@@ -1,15 +1,15 @@
 import { useState } from "react";
-import Header from "@/components/layout/Header";
-import FilterControls from "@/components/dashboard/FilterControls";
-import SalaryExperienceBoxPlot from "@/components/visualizations/SalaryExperienceBoxPlot";
-import SalaryLocationIndustryBarChart from "@/components/visualizations/SalaryLocationIndustryBarChart";
-import SalaryJobTitleRidgeline from "@/components/visualizations/SalaryJobTitleRidgeline";
-import SalaryPostingDateScatter from "@/components/visualizations/SalaryPostingDateScatter";
-import JobCountStackedBar from "@/components/visualizations/JobCountStackedBar";
-import JobPostingsTimeLine from "@/components/visualizations/JobPostingsTimeLine";
-import GeographicMapChart from "@/components/visualizations/GeographicMapChart";
-import { FilterOptions } from "@/types";
-import useEmploymentData from "@/hooks/useEmploymentData";
+import Header from "../components/layout/Header";
+import FilterControls from "../components/dashboard/FilterControls";
+import SalaryExperienceBoxPlot from "../components/visualizations/SalaryExperienceBoxPlot";
+import SalaryLocationIndustryBarChart from "../components/visualizations/SalaryLocationIndustryBarChart";
+import SalaryJobTitleRidgeline from "../components/visualizations/SalaryJobTitleRidgeline";
+import SalaryPostingDateScatter from "../components/visualizations/SalaryPostingDateScatter";
+import JobCountStackedBar from "../components/visualizations/JobCountStackedBar";
+import JobPostingsTimeLine from "../components/visualizations/JobPostingsTimeLine";
+import GeographicMapChart from "../components/visualizations/GeographicMapChart";
+import { FilterOptions } from "../types";
+import useEmploymentData from "../hooks/useEmploymentData";
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<FilterOptions>({

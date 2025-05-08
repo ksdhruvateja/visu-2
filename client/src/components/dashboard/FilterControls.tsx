@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "../../components/ui/button";
+import { Checkbox } from "../../components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { FilterOptions } from "@/types";
-import { Badge } from "@/components/ui/badge";
+} from "../../components/ui/popover";
+import { FilterOptions } from "../../types";
+import { Badge } from "../../components/ui/badge";
 import { X } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "../../components/ui/scroll-area";
 
 interface FilterControlsProps {
   onFilterChange: (filters: FilterOptions) => void;
