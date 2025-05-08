@@ -19,7 +19,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<FilterOptions>({
-    timeRange: "Last 12 Months",
     experienceLevel: "All Levels",
     location: "All Locations",
   });

@@ -30,7 +30,6 @@ const useEmploymentData = (filters: FilterOptions) => {
   const [hasMoreJobs, setHasMoreJobs] = useState(true);
   
   const fetchParams = new URLSearchParams({
-    timeRange: filters.timeRange,
     experienceLevel: filters.experienceLevel,
     location: filters.location,
     page: currentPage.toString(),

@@ -68,49 +68,32 @@ export const getEmploymentData = async (req: Request, res: Response) => {
 // Filter data based on user selections
 const filterData = (
   data: JobListing[],
-  timeRange: string,
   experienceLevel: string,
   location: string
 ): FilteredData => {
-  // Apply time range filter
-  let timeFilteredData = [...data];
-  const now = new Date();
-  
-  if (timeRange !== 'All Time') {
-    const monthsToSubtract = timeRange === 'Last 3 Months' ? 3 : 
-                             timeRange === 'Last 6 Months' ? 6 : 12;
-    
-    const cutoffDate = new Date(now);
-    cutoffDate.setMonth(cutoffDate.getMonth() - monthsToSubtract);
-    
-    timeFilteredData = timeFilteredData.filter(job => {
-      const postedDate = new Date(job.postedDate);
-      return postedDate >= cutoffDate;
-    });
-  }
+  // Start with all data
+  let filteredData = [...data];
 
   // Apply experience level filter
-  let experienceFilteredData = timeFilteredData;
   if (experienceLevel !== 'All Levels') {
-    experienceFilteredData = experienceFilteredData.filter(
+    filteredData = filteredData.filter(
       job => job.experienceLevel === experienceLevel
     );
   }
 
   // Apply location filter
-  let locationFilteredData = experienceFilteredData;
   if (location !== 'All Locations') {
-    locationFilteredData = locationFilteredData.filter(
+    filteredData = filteredData.filter(
       job => job.location === location
     );
   }
 
   // Calculate statistics
-  const stats = calculateStats(locationFilteredData, data);
+  const stats = calculateStats(filteredData, data);
 
   return {
-    jobs: locationFilteredData,
-    hasMore: locationFilteredData.length > 20,
+    jobs: filteredData,
+    hasMore: filteredData.length > 20,
     locations: cachedLocations || [],
     stats
   };
