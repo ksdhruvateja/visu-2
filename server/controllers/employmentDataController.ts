@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import path from 'path';
+import fs from 'fs';
 import { readEmploymentData } from '../services/csvParser';
 import { JobListing, DashboardStats } from '@/types';
 
@@ -30,13 +31,34 @@ export const getEmploymentData = async (req: Request, res: Response) => {
     // Read CSV data if not cached
     if (!cachedData) {
       try {
-        const csvPath = path.resolve(process.cwd(), 'attached_assets/employment_dataset.csv');
-        console.log("Loading CSV file from:", csvPath);
+        // Try different possible paths to find the CSV file
+        let csvPath = path.resolve(process.cwd(), 'attached_assets/employment_dataset.csv');
+        
+        // If file doesn't exist, try alternative path
+        if (!fs.existsSync(csvPath)) {
+          const altPath = path.resolve('./attached_assets/employment_dataset.csv');
+          if (fs.existsSync(altPath)) {
+            csvPath = altPath;
+          } else {
+            console.error("Could not find employment_dataset.csv in either directory:", {
+              path1: csvPath,
+              path2: altPath,
+              cwd: process.cwd(),
+              dirs: fs.readdirSync('.')
+            });
+          }
+        }
+        
+        console.log("Attempting to load CSV file from:", csvPath);
+        console.log("File exists:", fs.existsSync(csvPath));
+        console.log("File size:", fs.existsSync(csvPath) ? fs.statSync(csvPath).size : 'N/A');
+        
         cachedData = await readEmploymentData(csvPath);
         console.log(`Successfully loaded ${cachedData.length} job listings`);
         
         // Extract unique locations for filter dropdown
         cachedLocations = Array.from(new Set(cachedData.map(job => job.location)));
+        console.log(`Found ${cachedLocations.length} unique locations`);
       } catch (err) {
         console.error("Error loading employment data:", err);
         cachedData = [];
