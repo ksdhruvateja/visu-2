@@ -176,12 +176,12 @@ export default function GeographicMapChart({ isLoading }: GeographicMapChartProp
     
     // Coordinates for placing our regions in a hex grid
     const hexPositions = [
-      { name: "North America", row: 1, col: 3 },
-      { name: "South America", row: 3, col: 4 },
-      { name: "Europe", row: 1, col: 6 },
-      { name: "Africa", row: 2, col: 7 },
-      { name: "Asia", row: 2, col: 9 },
-      { name: "Australia", row: 4, col: 11 }
+      { name: "North America", row: 1, col: 2 },
+      { name: "South America", row: 3, col: 3 },
+      { name: "Europe", row: 1, col: 5 },
+      { name: "Africa", row: 2, col: 6 },
+      { name: "Asia", row: 1, col: 8 },
+      { name: "Australia", row: 3, col: 9 } // Moved Australia up and left to ensure full visibility
     ];
     
     // Create the background
