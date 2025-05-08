@@ -190,21 +190,15 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-        <div className="p-4 border-b border-gray-700">
-          <Skeleton className="h-6 w-3/4 bg-gray-700" />
-          <Skeleton className="h-4 w-1/2 mt-2 bg-gray-700" />
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+          <Skeleton className="h-5 w-1/3 bg-gray-700" />
+          <div className="flex items-center space-x-1">
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+          </div>
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-end mb-4 space-x-2">
-            <Skeleton className="h-6 w-24 bg-gray-700" />
-            <Skeleton className="h-6 w-28 bg-gray-700" />
-          </div>
-          <Skeleton className="h-64 sm:h-80 w-full bg-gray-700" />
-          <div className="mt-4">
-            <Skeleton className="h-3 w-full bg-gray-700" />
-            <Skeleton className="h-3 w-4/5 mt-2 bg-gray-700" />
-          </div>
+        <div className="p-2 flex-grow">
+          <Skeleton className="h-full w-full bg-gray-700/50 rounded" />
         </div>
       </div>
     );
@@ -213,67 +207,57 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
   // Handle the case when data is undefined
   if (!data || !data.points || data.points.length === 0) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-6 text-center">
-        <div className="p-8">
-          <span className="material-icons text-red-400 text-4xl mb-4">error_outline</span>
-          <h3 className="text-white font-bold text-lg mb-2">No Data Available</h3>
-          <p className="text-gray-400">Unable to load salary trend data. Please try again later.</p>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700">
+          <h3 className="text-sm font-semibold text-gray-400">Salary vs Posting Date</h3>
+        </div>
+        <div className="flex-grow flex items-center justify-center">
+          <div className="text-center p-4">
+            <div className="text-red-400 text-sm mb-1">No Data Available</div>
+            <p className="text-gray-500 text-xs">Try adjusting your filters</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-semibold flex items-center text-white">
-          <span className="material-icons text-cyan-400 mr-2">scatter_plot</span>
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-            Correlation Between Salary and Posting Date
-          </span>
-        </h2>
-        <p className="text-sm text-gray-400">Scatter plot with trend line showing salary trends over time</p>
-      </div>
-      <div className="p-4">
-        <div className="flex items-center justify-end mb-4 space-x-2">
-          <Button 
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+      <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+        <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          Salary vs Posting Date
+        </h3>
+        <div className="flex items-center gap-1">
+          <Button
             size="sm"
-            variant="outline"
-            className={`${
-              showTrendLine
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${showTrendLine ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setShowTrendLine(!showTrendLine)}
           >
-            Show Trend Line
+            Trend
           </Button>
-          <Button 
+          <Button
             size="sm"
-            variant="outline"
-            className={`${
-              groupByIndustry
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${groupByIndustry ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setGroupByIndustry(!groupByIndustry)}
           >
-            Group by Industry
+            Group
           </Button>
         </div>
-        <div className="relative">
+      </div>
+      <div className="p-2 flex-grow flex flex-col">
+        <div className="relative flex-grow">
           <svg 
             ref={svgRef} 
-            className="h-64 sm:h-80 w-full border border-gray-700 rounded-lg bg-gray-800"
+            width="100%" 
+            height="100%" 
+            className="bg-gray-800/30 rounded"
           ></svg>
           <div 
             ref={tooltipRef}
-            className="absolute opacity-0 bg-gray-900 p-3 rounded shadow-xl border border-gray-700 text-sm pointer-events-none z-10 text-white"
+            className="absolute opacity-0 bg-gray-900 p-2 rounded shadow-xl border border-gray-700 text-xs pointer-events-none z-10 text-white"
           ></div>
-        </div>
-        <div className="mt-4 text-xs text-gray-400">
-          <p>Hover over points to see job details.</p>
-          <p>The trend line indicates the general salary direction over time.</p>
         </div>
       </div>
     </div>
