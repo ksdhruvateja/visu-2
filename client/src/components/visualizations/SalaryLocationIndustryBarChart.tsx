@@ -124,11 +124,14 @@ export default function SalaryLocationIndustryBarChart({ data, isLoading }: Sala
       .selectAll('text')
       .attr('transform', 'translate(-10,0)rotate(-45)')
       .style('text-anchor', 'end')
-      .style('font-size', '12px');
+      .style('font-size', '12px')
+      .style('fill', '#ffffff');
 
     // Add Y axis
     g.append('g')
-      .call(d3.axisLeft(y).tickFormat(d => formatCurrency(+d)));
+      .call(d3.axisLeft(y).tickFormat(d => formatCurrency(+d)))
+      .selectAll('text')
+      .style('fill', '#ffffff');
 
     // Add title
     g.append('text')

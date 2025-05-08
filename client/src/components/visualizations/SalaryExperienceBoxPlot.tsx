@@ -74,7 +74,9 @@ export default function SalaryExperienceBoxPlot({ data, isLoading }: SalaryExper
 
     // Add Y axis
     g.append('g')
-      .call(d3.axisLeft(y).tickFormat(d => formatCurrency(+d)));
+      .call(d3.axisLeft(y).tickFormat(d => formatCurrency(+d)))
+      .selectAll('text')
+      .style('fill', '#ffffff');
 
     // Add title
     g.append('text')
@@ -83,6 +85,7 @@ export default function SalaryExperienceBoxPlot({ data, isLoading }: SalaryExper
       .attr('text-anchor', 'middle')
       .style('font-size', '14px')
       .style('font-weight', 'bold')
+      .style('fill', '#ffffff')
       .text('Salary Distribution by Experience Level');
 
     // Create tooltip

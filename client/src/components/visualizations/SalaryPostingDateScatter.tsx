@@ -75,6 +75,7 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
       .attr('y', height + 40)
       .attr('text-anchor', 'middle')
       .style('font-size', '12px')
+      .style('fill', '#ffffff')
       .text('Posting Date');
 
     // Add Y axis label
@@ -84,6 +85,7 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
       .attr('y', -50)
       .attr('text-anchor', 'middle')
       .style('font-size', '12px')
+      .style('fill', '#ffffff')
       .text('Salary (USD)');
 
     // Add title
