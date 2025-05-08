@@ -241,22 +241,17 @@ export default function SalaryLocationIndustryBarChart({ data, isLoading }: Sala
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-        <div className="p-4 border-b border-gray-700">
-          <Skeleton className="h-6 w-3/4 bg-gray-700" />
-          <Skeleton className="h-4 w-1/2 mt-2 bg-gray-700" />
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700">
+          <Skeleton className="h-5 w-1/3 bg-gray-700" />
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-end mb-4 space-x-2">
-            <Skeleton className="h-6 w-24 bg-gray-700" />
-            <Skeleton className="h-6 w-24 bg-gray-700" />
-            <Skeleton className="h-6 w-24 bg-gray-700" />
+        <div className="p-2 flex-grow">
+          <div className="flex flex-wrap gap-1 mb-2">
+            <Skeleton className="h-5 w-16 bg-gray-700" />
+            <Skeleton className="h-5 w-24 bg-gray-700" />
+            <Skeleton className="h-5 w-20 bg-gray-700" />
           </div>
-          <Skeleton className="h-64 sm:h-80 w-full bg-gray-700" />
-          <div className="mt-4">
-            <Skeleton className="h-3 w-full bg-gray-700" />
-            <Skeleton className="h-3 w-4/5 mt-2 bg-gray-700" />
-          </div>
+          <Skeleton className="h-full w-full bg-gray-700/50 rounded" />
         </div>
       </div>
     );
@@ -265,36 +260,35 @@ export default function SalaryLocationIndustryBarChart({ data, isLoading }: Sala
   // Handle the case when data or industries is undefined
   if (!data || !data.industries) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-6 text-center">
-        <div className="p-8">
-          <span className="material-icons text-red-400 text-4xl mb-4">error_outline</span>
-          <h3 className="text-white font-bold text-lg mb-2">No Data Available</h3>
-          <p className="text-gray-400">Unable to load industry salary data. Please try again later.</p>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700">
+          <h3 className="text-sm font-semibold text-gray-400">Salary by Location & Industry</h3>
+        </div>
+        <div className="flex-grow flex items-center justify-center">
+          <div className="text-center p-4">
+            <div className="text-red-400 text-sm mb-1">No Data Available</div>
+            <p className="text-gray-500 text-xs">Try adjusting your filters</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-semibold flex items-center text-white">
-          <span className="material-icons text-cyan-400 mr-2">bar_chart</span>
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-            Average Salary by Location and Industry
-          </span>
-        </h2>
-        <p className="text-sm text-gray-400">Grouped bar chart comparing salaries across locations and industries</p>
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+      <div className="p-2 border-b border-gray-700">
+        <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          Salary by Location & Industry
+        </h3>
       </div>
-      <div className="p-4">
-        <div className="flex items-center justify-end mb-4 flex-wrap gap-2">
-          <span className="text-xs text-gray-400 mr-2">Select Industries:</span>
-          <div className="flex flex-wrap gap-2">
+      <div className="p-2 flex-grow flex flex-col">
+        <div className="flex items-start justify-end mb-2 flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1 max-h-16 overflow-y-auto w-full">
             {data.industries.map(industry => (
               <Badge
                 key={industry}
                 variant="outline"
-                className={`cursor-pointer hover:bg-opacity-80 transition-all duration-200 ${
+                className={`cursor-pointer transition-all duration-200 text-xs py-0 h-5 ${
                   activeIndustries.includes(industry)
                     ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white border-transparent'
                     : 'bg-gray-800 text-gray-400 border-gray-600 hover:border-gray-500'
@@ -303,25 +297,23 @@ export default function SalaryLocationIndustryBarChart({ data, isLoading }: Sala
               >
                 {industry}
                 {activeIndustries.includes(industry) && (
-                  <span className="material-icons ml-1 text-xs">check</span>
+                  <span className="ml-1">✓</span>
                 )}
               </Badge>
             ))}
           </div>
         </div>
-        <div className="relative mt-6">
+        <div className="relative flex-grow">
           <svg 
             ref={svgRef} 
-            className="h-64 sm:h-80 w-full border border-gray-700 rounded-lg bg-gray-800"
+            width="100%" 
+            height="100%" 
+            className="bg-gray-800/30 rounded"
           ></svg>
           <div 
             ref={tooltipRef}
-            className="absolute opacity-0 bg-gray-900 p-3 rounded shadow-xl border border-gray-700 text-sm pointer-events-none z-10 text-white"
+            className="absolute opacity-0 bg-gray-900 p-2 rounded shadow-xl border border-gray-700 text-xs pointer-events-none z-10 text-white"
           ></div>
-        </div>
-        <div className="mt-4 text-xs text-gray-400">
-          <p>Click on industries to toggle selection (multiple industries can be selected).</p>
-          <p>Hover over bars to see detailed salary information.</p>
         </div>
       </div>
     </div>
