@@ -17,6 +17,7 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
   const [timeInterval, setTimeInterval] = useState<'Monthly' | 'Weekly' | 'Quarterly'>('Monthly');
   const [visibleExperienceLevels, setVisibleExperienceLevels] = useState<string[]>([]);
   const [brushExtent, setBrushExtent] = useState<[Date, Date] | null>(null);
+  const [redrawTrigger, setRedrawTrigger] = useState(0);
 
   // Set visible experience levels when data changes
   useEffect(() => {
@@ -399,7 +400,7 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [data, isLoading, visibleExperienceLevels, timeInterval, brushExtent, aggregatedData]);
+  }, [data, isLoading, visibleExperienceLevels, timeInterval, brushExtent, aggregatedData, redrawTrigger]);
 
   if (isLoading) {
     return (
@@ -446,7 +447,11 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
             size="sm"
             variant="ghost"
             className={`h-6 px-2 py-0 text-xs ${timeInterval === 'Weekly' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
-            onClick={() => setTimeInterval('Weekly')}
+            onClick={() => {
+              setTimeInterval('Weekly');
+              setBrushExtent(null);
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
             W
           </Button>
@@ -454,7 +459,11 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
             size="sm"
             variant="ghost"
             className={`h-6 px-2 py-0 text-xs ${timeInterval === 'Monthly' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
-            onClick={() => setTimeInterval('Monthly')}
+            onClick={() => {
+              setTimeInterval('Monthly');
+              setBrushExtent(null);
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
             M
           </Button>
@@ -462,7 +471,11 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
             size="sm"
             variant="ghost"
             className={`h-6 px-2 py-0 text-xs ${timeInterval === 'Quarterly' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
-            onClick={() => setTimeInterval('Quarterly')}
+            onClick={() => {
+              setTimeInterval('Quarterly');
+              setBrushExtent(null);
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
             Q
           </Button>

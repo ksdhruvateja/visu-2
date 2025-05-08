@@ -104,9 +104,14 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
       .domain(industries)
       .range(d3.schemeCategory10);
 
+    // Filter points by selected industry if one is selected
+    const filteredPoints = selectedIndustry 
+      ? data.points.filter(d => d.industry === selectedIndustry)
+      : data.points;
+    
     // Add the scatter plot points
     g.selectAll('circle')
-      .data(data.points)
+      .data(filteredPoints)
       .enter()
       .append('circle')
       .attr('cx', d => x(parseDate(d.date.split('T')[0])!))
@@ -171,18 +176,31 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
         .selectAll('g')
         .data(industries.slice(0, 10)) // Limit to top 10 for space
         .enter().append('g')
-        .attr('transform', (d, i) => `translate(${width - 100},${i * 20})`);
+        .attr('transform', (d, i) => `translate(${width - 100},${i * 20})`)
+        .style('cursor', 'pointer')
+        .on('click', function(event, d) {
+          // Toggle industry selection
+          if (selectedIndustry === d) {
+            setSelectedIndustry(null);
+          } else {
+            setSelectedIndustry(d);
+          }
+          setRedrawTrigger(prev => prev + 1);
+        });
 
       legend.append('rect')
         .attr('x', 0)
         .attr('width', 15)
         .attr('height', 15)
-        .attr('fill', d => colorScale(d));
+        .attr('fill', d => colorScale(d))
+        .attr('stroke', d => selectedIndustry === d ? 'white' : 'none')
+        .attr('stroke-width', 2);
 
       legend.append('text')
         .attr('x', 20)
         .attr('y', 7.5)
         .attr('dy', '0.32em')
+        .style('fill', '#e2e8f0') // Light color for better visibility
         .text(d => d);
     }
 
@@ -194,7 +212,7 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [data, isLoading, showTrendLine, groupByIndustry]);
+  }, [data, isLoading, showTrendLine, groupByIndustry, selectedIndustry, redrawTrigger]);
 
   if (isLoading) {
     return (
