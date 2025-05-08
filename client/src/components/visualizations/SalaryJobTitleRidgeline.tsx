@@ -370,6 +370,23 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           >
             Top 10
           </Button>
+          <div className="h-4 w-px bg-gray-700 mx-1" />
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 px-2 py-0 text-xs"
+            onClick={() => setRedrawTrigger(prev => prev + 1)}
+          >
+            Sort
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 px-2 py-0 text-xs"
+            onClick={() => setRedrawTrigger(prev => prev + 1)}
+          >
+            Growth
+          </Button>
         </div>
       </div>
       <div className="p-2 flex-grow flex flex-col">
