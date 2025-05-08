@@ -4,7 +4,7 @@ import { StackedBarData } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface JobCountStackedBarProps {
-  data: StackedBarData;
+  data: StackedBarData | undefined;
   isLoading: boolean;
 }
 

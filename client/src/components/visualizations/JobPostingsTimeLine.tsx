@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 
 interface JobPostingsTimeLineProps {
-  data: TimeLineData;
+  data: TimeLineData | undefined;
   isLoading: boolean;
 }
 

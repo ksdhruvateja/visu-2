@@ -5,7 +5,7 @@ import { formatCurrency, formatDate } from "@/lib/utils/data";
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface SalaryPostingDateScatterProps {
-  data: ScatterPlotData;
+  data: ScatterPlotData | undefined;
   isLoading: boolean;
 }
 

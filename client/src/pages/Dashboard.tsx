@@ -9,6 +9,7 @@ import SalaryJobTitleRidgeline from "@/components/visualizations/SalaryJobTitleR
 import SalaryPostingDateScatter from "@/components/visualizations/SalaryPostingDateScatter";
 import JobCountStackedBar from "@/components/visualizations/JobCountStackedBar";
 import JobPostingsTimeLine from "@/components/visualizations/JobPostingsTimeLine";
+import GeographicMapChart from "@/components/visualizations/GeographicMapChart";
 import JobCard from "@/components/dashboard/JobCard";
 import { Button } from "@/components/ui/button";
 import { DashboardStats, FilterOptions, JobListing } from "@/types";
@@ -159,56 +160,9 @@ export default function Dashboard() {
           />
 
           {/* Geographic Map Visualization */}
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 col-span-1 lg:col-span-2">
-            <div className="p-4 border-b border-gray-700">
-              <h2 className="text-lg font-semibold flex items-center text-white">
-                <span className="material-icons text-cyan-400 mr-2">public</span>
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-                  Geographic Job Distribution
-                </span>
-              </h2>
-              <p className="text-sm text-gray-400">
-                Interactive map visualization of job concentration
-              </p>
-            </div>
-            <div className="p-4">
-              <div className="flex items-center justify-end mb-4 space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-blue-900/50 text-blue-400 border-blue-700 hover:bg-blue-800 hover:text-blue-300"
-                >
-                  Job Count
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-gray-800/50 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-300"
-                >
-                  Average Salary
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-gray-800/50 text-gray-400 border-gray-700 hover:bg-gray-700 hover:text-gray-300"
-                >
-                  Job Growth
-                </Button>
-              </div>
-              <div className="h-80 sm:h-96 border border-gray-700 rounded-lg flex items-center justify-center bg-gray-800/50 backdrop-blur-sm">
-                <div className="flex flex-col items-center">
-                  <span className="material-icons text-cyan-700 text-5xl mb-2">public</span>
-                  <p className="text-gray-400 text-sm">
-                    Map visualization coming soon...
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4 text-xs text-gray-400">
-                <p>Hover over regions to see detailed statistics.</p>
-                <p>Click on areas to filter all visualizations by that location.</p>
-              </div>
-            </div>
-          </div>
+          <GeographicMapChart 
+            isLoading={isLoading}
+          />
         </div>
 
         {/* Job Listings Preview */}
