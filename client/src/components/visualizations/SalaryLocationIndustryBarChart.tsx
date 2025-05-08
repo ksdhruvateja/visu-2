@@ -308,7 +308,9 @@ export default function SalaryLocationIndustryBarChart({ data, isLoading }: Sala
             ref={svgRef} 
             width="100%" 
             height="100%" 
-            className="bg-gray-800/30 rounded"
+            preserveAspectRatio="xMidYMid meet"
+            className="bg-gray-800/30 rounded overflow-visible"
+            style={{ maxHeight: '100%', maxWidth: '100%' }}
           ></svg>
           <div 
             ref={tooltipRef}
