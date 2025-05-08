@@ -18,7 +18,6 @@ export const getEmploymentData = async (req: Request, res: Response) => {
   try {
     // Get query parameters
     const { 
-      timeRange = 'Last 12 Months', 
       experienceLevel = 'All Levels', 
       location = 'All Locations',
       page = '1',
@@ -40,7 +39,6 @@ export const getEmploymentData = async (req: Request, res: Response) => {
     // Apply filters
     const filteredData = filterData(
       cachedData, 
-      timeRange as string, 
       experienceLevel as string, 
       location as string
     );

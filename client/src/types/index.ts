@@ -27,7 +27,6 @@ export interface DashboardStats {
 }
 
 export interface FilterOptions {
-  timeRange: string;
   experienceLevel: string;
   location: string;
 }
