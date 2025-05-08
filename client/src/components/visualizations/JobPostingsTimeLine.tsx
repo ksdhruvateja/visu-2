@@ -31,15 +31,104 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
     
     // Parse dates
     const timePoints = data.timePoints.map(date => date);
+    let aggregatedData: Record<string, Record<string, number>> = {};
     
-    // If we need to re-aggregate for weekly or quarterly, we would do it here
-    // For this implementation, we'll keep the existing monthly aggregation
-    
-    return {
-      timePoints,
-      experienceLevels: data.experienceLevels,
-      data: data.data
-    };
+    // Aggregate data based on selected time interval
+    if (timeInterval === 'Weekly') {
+      // Weekly aggregation - group into weeks
+      aggregatedData = {};
+      data.experienceLevels.forEach(expLevel => {
+        aggregatedData[expLevel] = {};
+        
+        // Group timepoints into weeks
+        let weekGroups: Record<string, { sum: number, count: number }> = {};
+        
+        data.timePoints.forEach(date => {
+          const weekOfYear = getWeekOfYear(date);
+          if (!weekGroups[weekOfYear]) {
+            weekGroups[weekOfYear] = { sum: 0, count: 0 };
+          }
+          
+          weekGroups[weekOfYear].sum += data.data[expLevel][date] || 0;
+          weekGroups[weekOfYear].count += 1;
+        });
+        
+        // Calculate averages
+        Object.entries(weekGroups).forEach(([week, stats]) => {
+          aggregatedData[expLevel][`Week ${week}`] = Math.round(stats.sum / stats.count);
+        });
+      });
+      
+      // Create new time points for weeks
+      const newTimePoints = Object.keys(
+        Object.values(aggregatedData)[0] || {}
+      ).sort();
+      
+      return {
+        timePoints: newTimePoints,
+        experienceLevels: data.experienceLevels,
+        data: aggregatedData
+      };
+    } 
+    else if (timeInterval === 'Quarterly') {
+      // Quarterly aggregation
+      aggregatedData = {};
+      data.experienceLevels.forEach(expLevel => {
+        aggregatedData[expLevel] = {};
+        
+        // Group timepoints into quarters
+        let quarterGroups: Record<string, { sum: number, count: number }> = {};
+        
+        data.timePoints.forEach(date => {
+          const quarter = getQuarter(date);
+          if (!quarterGroups[quarter]) {
+            quarterGroups[quarter] = { sum: 0, count: 0 };
+          }
+          
+          quarterGroups[quarter].sum += data.data[expLevel][date] || 0;
+          quarterGroups[quarter].count += 1;
+        });
+        
+        // Calculate averages
+        Object.entries(quarterGroups).forEach(([quarter, stats]) => {
+          aggregatedData[expLevel][quarter] = Math.round(stats.sum / stats.count);
+        });
+      });
+      
+      // Create new time points for quarters
+      const newTimePoints = Object.keys(
+        Object.values(aggregatedData)[0] || {}
+      ).sort();
+      
+      return {
+        timePoints: newTimePoints,
+        experienceLevels: data.experienceLevels,
+        data: aggregatedData
+      };
+    } 
+    else {
+      // Monthly (default) - use the original data
+      return {
+        timePoints,
+        experienceLevels: data.experienceLevels,
+        data: data.data
+      };
+    }
+  };
+  
+  // Helper function to get week of year from date string
+  const getWeekOfYear = (dateStr: string) => {
+    const date = parseISO(dateStr);
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const days = Math.floor((date.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000));
+    return Math.ceil((days + startOfYear.getDay() + 1) / 7).toString();
+  };
+  
+  // Helper function to get quarter from date string
+  const getQuarter = (dateStr: string) => {
+    const date = parseISO(dateStr);
+    const quarter = Math.floor(date.getMonth() / 3) + 1;
+    return `Q${quarter} ${date.getFullYear()}`;
   };
 
   const aggregatedData = getAggregatedData();

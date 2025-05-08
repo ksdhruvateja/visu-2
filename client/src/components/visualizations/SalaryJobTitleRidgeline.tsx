@@ -83,13 +83,29 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
     g.selectAll('.x-axis path, .x-axis line')
       .style('stroke', '#4b5563');
 
-    // Add Y axis
+    // Add Y axis with more distinct job title styling
     g.append('g')
       .attr('class', 'y-axis')
       .call(d3.axisLeft(y))
       .selectAll('text')
-      .style('font-size', '11px')
-      .style('fill', '#e2e8f0');
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .style('fill', (d) => {
+        // Create unique colors for each job title
+        const jobColors = {
+          'Data Scientist': '#38bdf8',
+          'Software Engineer': '#a78bfa',
+          'Product Manager': '#f87171',
+          'UX Designer': '#4ade80',
+          'Marketing Analyst': '#fb923c',
+          'Financial Analyst': '#facc15',
+          'Business Analyst': '#34d399',
+          'DevOps Engineer': '#f472b6',
+          'Sales Manager': '#60a5fa',
+          'HR Manager': '#c084fc'
+        };
+        return jobColors[d as string] || '#e2e8f0';
+      });
     
     // Style the axis lines
     g.selectAll('.y-axis path, .y-axis line')
