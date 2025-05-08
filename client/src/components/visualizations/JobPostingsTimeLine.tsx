@@ -189,11 +189,19 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
       .selectAll('text')
       .attr('transform', 'translate(-10,0)rotate(-45)')
       .style('text-anchor', 'end')
-      .style('font-size', '12px');
+      .style('font-size', '12px')
+      .style('fill', '#e2e8f0'); // Light color for better visibility
+      
+    // Style the axis lines
+    g.selectAll('.domain, .tick line')
+      .style('stroke', '#4b5563');
 
     // Add Y axis
     g.append('g')
-      .call(d3.axisLeft(y).ticks(5));
+      .call(d3.axisLeft(y).ticks(5))
+      .selectAll('text')
+      .style('font-size', '12px')
+      .style('fill', '#e2e8f0'); // Light color for better visibility
 
     // Add title
     g.append('text')
