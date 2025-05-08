@@ -22,8 +22,8 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    // Set up dimensions and margins
-    const margin = { top: 40, right: 30, bottom: 100, left: 60 };
+    // Set up dimensions and margins - increased left margin for y-axis labels
+    const margin = { top: 20, right: 20, bottom: 60, left: 120 };
     const width = svgRef.current!.clientWidth - margin.left - margin.right;
     const height = svgRef.current!.clientHeight - margin.top - margin.bottom;
 
@@ -83,13 +83,14 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
     g.selectAll('.x-axis path, .x-axis line')
       .style('stroke', '#4b5563');
 
-    // Add Y axis with more distinct job title styling
+    // Add Y axis with more distinct job title styling and improved visibility
     g.append('g')
       .attr('class', 'y-axis')
       .call(d3.axisLeft(y))
       .selectAll('text')
-      .style('font-size', '12px')
+      .style('font-size', '11px')
       .style('font-weight', 'bold')
+      .attr('x', -10) // Move labels to the left to ensure visibility
       .style('fill', (d) => {
         // Create unique colors for each job title
         const jobColors = {

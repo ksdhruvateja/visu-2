@@ -52,49 +52,54 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Full-screen grid layout with visualizations that expand to fill all available space */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-1 flex-1 p-1 overflow-hidden">
-          {/* Row 1: Top 4 charts */}
-          <div className="w-full h-full">
-            <SalaryLocationIndustryBarChart
-              data={visualizationData?.groupedBar}
-              isLoading={isLoading}
-            />
+        {/* Grid layout with optimized visualization sizing and spacing */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-1 flex-1 p-1 overflow-hidden">
+          {/* Row 1: Left side charts */}
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-1 h-full">
+            <div className="w-full h-full">
+              <SalaryLocationIndustryBarChart
+                data={visualizationData?.groupedBar}
+                isLoading={isLoading}
+              />
+            </div>
+
+            <div className="w-full h-full">
+              <SalaryJobTitleRidgeline
+                data={visualizationData?.ridgeline}
+                isLoading={isLoading}
+              />
+            </div>
+            
+            <div className="w-full h-full">
+              <SalaryPostingDateScatter
+                data={visualizationData?.scatterPlot}
+                isLoading={isLoading}
+              />
+            </div>
+            
+            <div className="w-full h-full">
+              <JobCountStackedBar
+                data={visualizationData?.stackedBar}
+                isLoading={isLoading}
+              />
+            </div>
           </div>
 
-          <div className="w-full h-full">
-            <SalaryJobTitleRidgeline
-              data={visualizationData?.ridgeline}
-              isLoading={isLoading}
-            />
-          </div>
-          
-          <div className="w-full h-full">
-            <SalaryPostingDateScatter
-              data={visualizationData?.scatterPlot}
-              isLoading={isLoading}
-            />
-          </div>
-          
-          <div className="w-full h-full">
-            <JobCountStackedBar
-              data={visualizationData?.stackedBar}
-              isLoading={isLoading}
-            />
-          </div>
-
-          {/* Row 2: Bottom 2 charts with map spanning 3 columns */}
-          <div className="w-full h-full md:col-span-3">
-            <GeographicMapChart 
-              isLoading={isLoading}
-            />
-          </div>
-          
-          <div className="w-full h-full">
-            <JobPostingsTimeLine
-              data={visualizationData?.timeLine}
-              isLoading={isLoading}
-            />
+          {/* Row 1: Right side - Map and Timeline stacked */}
+          <div className="flex flex-col gap-1 h-full">
+            {/* Geographic map now takes less space */}
+            <div className="w-full h-1/2">
+              <GeographicMapChart 
+                isLoading={isLoading}
+              />
+            </div>
+            
+            <div className="w-full h-1/2">
+              <JobPostingsTimeLine
+                data={visualizationData?.timeLine}
+                isLoading={isLoading}
+              />
+            </div>
           </div>
         </div>
       </main>
