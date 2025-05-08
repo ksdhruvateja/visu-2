@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { GroupedBarData } from '../../types';
-import { formatCurrency } from "../../lib/utils/data";
-import { Skeleton } from '../../components/ui/skeleton';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
+import { GroupedBarData } from '@/types';
+import { formatCurrency } from "@/lib/utils/data";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface SalaryLocationIndustryBarChartProps {
   data: GroupedBarData | undefined;
@@ -124,14 +124,11 @@ export default function SalaryLocationIndustryBarChart({ data, isLoading }: Sala
       .selectAll('text')
       .attr('transform', 'translate(-10,0)rotate(-45)')
       .style('text-anchor', 'end')
-      .style('font-size', '12px')
-      .style('fill', '#ffffff');
+      .style('font-size', '12px');
 
     // Add Y axis
     g.append('g')
-      .call(d3.axisLeft(y).tickFormat(d => formatCurrency(+d)))
-      .selectAll('text')
-      .style('fill', '#ffffff');
+      .call(d3.axisLeft(y).tickFormat(d => formatCurrency(+d)));
 
     // Add title
     g.append('text')

@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { ScatterPlotData } from '../../types';
-import { formatCurrency, formatDate } from "../../lib/utils/data";
-import { Skeleton } from '../../components/ui/skeleton';
-import { Button } from '../../components/ui/button';
+import { ScatterPlotData } from '@/types';
+import { formatCurrency, formatDate } from "@/lib/utils/data";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 interface SalaryPostingDateScatterProps {
   data: ScatterPlotData | undefined;
@@ -75,7 +75,6 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
       .attr('y', height + 40)
       .attr('text-anchor', 'middle')
       .style('font-size', '12px')
-      .style('fill', '#ffffff')
       .text('Posting Date');
 
     // Add Y axis label
@@ -85,7 +84,6 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
       .attr('y', -50)
       .attr('text-anchor', 'middle')
       .style('font-size', '12px')
-      .style('fill', '#ffffff')
       .text('Salary (USD)');
 
     // Add title

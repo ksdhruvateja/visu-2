@@ -1,6 +1,6 @@
 import { Route, Switch } from "wouter";
-import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/not-found";
+import Dashboard from "@/pages/Dashboard";
+import NotFound from "@/pages/not-found";
 
 function App() {
   return (

@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { Skeleton } from '../../components/ui/skeleton';
-import { Button } from '../../components/ui/button';
-import { formatCurrency } from "../../lib/utils/data";
-import { Badge } from '../../components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { formatCurrency } from "@/lib/utils/data";
+import { Badge } from '@/components/ui/badge';
 
 // Enhanced world map data structure with industry and position details
 interface WorldMapData {

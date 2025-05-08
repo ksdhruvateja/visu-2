@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import { RidgelineData } from '../../types';
-import { formatCurrency } from "../../lib/utils/data";
-import { Skeleton } from '../../components/ui/skeleton';
-import { Button } from '../../components/ui/button';
+import { RidgelineData } from '@/types';
+import { formatCurrency } from "@/lib/utils/data";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 interface SalaryJobTitleRidgelineProps {
   data: RidgelineData | undefined;
@@ -14,8 +14,6 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
   const svgRef = useRef<SVGSVGElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [showTopTitles, setShowTopTitles] = useState(true);
-  const [sortBy, setSortBy] = useState<'median'|'count'|'name'>('median');
-  const [showGrowth, setShowGrowth] = useState(false);
   const [redrawTrigger, setRedrawTrigger] = useState(0);
 
   useEffect(() => {
@@ -45,14 +43,8 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
         max: d3.max(range.values) || 0,
         q1: d3.quantile(range.values.sort((a, b) => a - b), 0.25) || 0,
         q3: d3.quantile(range.values.sort((a, b) => a - b), 0.75) || 0,
-        yoyGrowth: range.yoyGrowth || 0, // Added yoyGrowth
-        skillPremium: range.skillPremium || 0 // Added skillPremium
       }))
-      .sort((a, b) => {
-        if (sortBy === 'median') return b.median - a.median;
-        if (sortBy === 'count') return b.count - a.count;
-        return a.title.localeCompare(b.title);
-      });
+      .sort((a, b) => b.median - a.median);
 
     // Select job titles to display (top 10 if showTopTitles is true, or max 20 for "All")
     const displayedTitles = showTopTitles
@@ -86,11 +78,11 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('transform', 'translate(-10,5)rotate(-45)')
       .style('text-anchor', 'end')
       .style('font-size', '10px')
-      .style('fill', '#ffffff');
-
+      .style('fill', '#e2e8f0');
+    
     // Style the axis lines
     g.selectAll('.x-axis path, .x-axis line')
-      .style('stroke', '#ffffff');
+      .style('stroke', '#4b5563');
 
     // Add Y axis with more distinct job title styling and improved visibility
     g.append('g')
@@ -99,9 +91,27 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .selectAll('text')
       .style('font-size', '11px')
       .style('font-weight', 'bold')
-      .style('fill', '#ffffff')
       .attr('x', -10) // Move labels to the left to ensure visibility
-
+      .style('fill', (d) => {
+        // Create unique colors for each job title
+        const jobColors = {
+          'Data Scientist': '#38bdf8',
+          'Software Engineer': '#a78bfa',
+          'Product Manager': '#f87171',
+          'UX Designer': '#4ade80',
+          'Marketing Analyst': '#fb923c',
+          'Financial Analyst': '#facc15',
+          'Business Analyst': '#34d399',
+          'DevOps Engineer': '#f472b6',
+          'Sales Manager': '#60a5fa',
+          'HR Manager': '#c084fc'
+        };
+        return jobColors[d as string] || '#e2e8f0';
+      });
+    
+    // Style the axis lines
+    g.selectAll('.y-axis path, .y-axis line')
+      .style('stroke', '#4b5563');
 
     // Add title
     g.append('text')
@@ -157,15 +167,15 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           .attr('x2', '100%')
           .attr('y1', '0%')
           .attr('y2', '0%');
-
+        
         gradient.append('stop')
           .attr('offset', '0%')
           .attr('stop-color', '#0ea5e9');
-
+        
         gradient.append('stop')
           .attr('offset', '100%')
           .attr('stop-color', '#8b5cf6');
-
+        
         return `url(#${gradientId})`;
       })
       .attr('rx', 2)
@@ -207,7 +217,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           .select('rect:nth-child(2)')
           .attr('opacity', 1)
           .style('filter', 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))');
-
+        
         // Show tooltip with statistics
         tooltip
           .style('opacity', 1)
@@ -217,20 +227,6 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
             <div>Q1-Q3: ${formatCurrency(d.q1)} - ${formatCurrency(d.q3)}</div>
             <div>Range: ${formatCurrency(d.min)} - ${formatCurrency(d.max)}</div>
             <div class="mt-1 text-xs text-gray-300">Based on ${d.count} job postings</div>
-            <div class="mt-2 pt-2 border-t border-gray-700">
-              <div class="flex items-center justify-between">
-                <span class="text-xs text-gray-400">YoY Growth</span>
-                <span class="${d.yoyGrowth >= 0 ? 'text-green-400' : 'text-red-400'} text-xs font-medium">
-                  ${d.yoyGrowth > 0 ? '+' : ''}${d.yoyGrowth.toFixed(1)}%
-                </span>
-              </div>
-              <div class="flex items-center justify-between mt-1">
-                <span class="text-xs text-gray-400">Skill Premium</span>
-                <span class="text-blue-400 text-xs font-medium">
-                  +${d.skillPremium.toFixed(1)}%
-                </span>
-              </div>
-            </div>
           `);
       })
       .on('mousemove', function(event) {
@@ -244,7 +240,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           .select('rect:nth-child(2)')
           .attr('opacity', 0.8)
           .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))');
-
+        
         tooltip.style('opacity', 0);
       });
 
@@ -257,7 +253,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('fill', '#94a3b8')
       .attr('font-size', '8px')
       .text(d => formatCurrency(d.min));
-
+    
     jobGroups.append('text')
       .attr('x', d => x(d.max) + 5)
       .attr('y', y.bandwidth() / 2)
@@ -286,18 +282,6 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('font-size', '10px')
       .text('Circle size = Job count');
 
-    // Add growth indicators if showGrowth is true
-    if (showGrowth) {
-      jobGroups.append('text')
-        .attr('x', width + 30)
-        .attr('y', y.bandwidth() / 2)
-        .attr('text-anchor', 'start')
-        .attr('alignment-baseline', 'middle')
-        .attr('fill', d => d.yoyGrowth >= 0 ? '#4ade80' : '#f87171')
-        .attr('font-size', '10px')
-        .text(d => `${d.yoyGrowth > 0 ? '+' : ''}${d.yoyGrowth.toFixed(1)}%`);
-    }
-
     // Add responsive resize handler
     const handleResize = () => {
       // This would normally redraw the chart on resize
@@ -306,7 +290,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [data, isLoading, showTopTitles, redrawTrigger, showGrowth]);
+  }, [data, isLoading, showTopTitles, redrawTrigger]);
 
   if (isLoading) {
     return (
@@ -369,29 +353,6 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
             }}
           >
             Top 10
-          </Button>
-          <div className="h-4 w-px bg-gray-700 mx-1" />
-          <Button
-            size="sm"
-            variant="ghost"
-            className={`h-6 px-2 py-0 text-xs ${sortBy !== 'median' ? 'bg-blue-900/30 text-blue-400' : ''}`}
-            onClick={() => {
-              setSortBy(current => current === 'median' ? 'count' : current === 'count' ? 'name' : 'median');
-              setRedrawTrigger(prev => prev + 1);
-            }}
-          >
-            Sort: {sortBy === 'median' ? 'Salary' : sortBy === 'count' ? 'Count' : 'Name'}
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className={`h-6 px-2 py-0 text-xs ${showGrowth ? 'bg-blue-900/30 text-blue-400' : ''}`}
-            onClick={() => {
-              setShowGrowth(!showGrowth);
-              setRedrawTrigger(prev => prev + 1);
-            }}
-          >
-            Growth
           </Button>
         </div>
       </div>

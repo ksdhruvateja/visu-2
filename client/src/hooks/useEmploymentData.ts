@@ -11,7 +11,7 @@ import {
   StackedBarData, 
   TimeLineData,
   VisualizationData
-} from "../types";
+} from "@/types";
 import { 
   processBoxPlotData, 
   processGroupedBarData, 
@@ -19,8 +19,7 @@ import {
   processScatterPlotData, 
   processStackedBarData, 
   processTimeLineData 
-} from "../lib/utils/data";
-import { apiBaseUrl } from "../lib/utils/hostConfig";
+} from "@/lib/utils/data";
 
 const useEmploymentData = (filters: FilterOptions) => {
   const [jobListings, setJobListings] = useState<JobListing[]>([]);
@@ -76,13 +75,9 @@ const useEmploymentData = (filters: FilterOptions) => {
     stats: DashboardStats;
   }
 
-  const apiUrl = `/api/employment-data?${fetchParams.toString()}`;
-  console.log(`Fetching employment data from: ${apiBaseUrl}${apiUrl}`);
-
   const { data, isLoading, error } = useQuery<ApiResponse>({
-    queryKey: [apiUrl],
+    queryKey: [`/api/employment-data?${fetchParams.toString()}`],
     refetchOnWindowFocus: false,
-    retry: 2
   });
 
   const loadMoreJobs = () => {
@@ -101,13 +96,6 @@ const useEmploymentData = (filters: FilterOptions) => {
   useEffect(() => {
     if (!isLoading && data) {
       try {
-        console.log("Successfully loaded data:", {
-          jobCount: data.jobs?.length,
-          hasMore: data.hasMore,
-          locationsCount: data.locations?.length,
-          stats: data.stats
-        });
-        
         // Update job listings
         if (currentPage === 1) {
           setJobListings(data.jobs || []);
@@ -131,7 +119,6 @@ const useEmploymentData = (filters: FilterOptions) => {
         // Process data for visualizations if we're on page 1
         if (currentPage === 1 && data.jobs?.length > 0) {
           const allJobs = data.jobs as JobListing[];
-          console.log(`Processing visualization data for ${allJobs.length} jobs`);
           
           const boxPlotData = processBoxPlotData(allJobs);
           const groupedBarData = processGroupedBarData(allJobs);
@@ -148,8 +135,6 @@ const useEmploymentData = (filters: FilterOptions) => {
             timeLine: timeLineData,
             scatterPlot: scatterPlotData
           });
-          
-          console.log("Visualization data processed successfully");
         }
       } catch (err) {
         console.error("Error processing data:", err);

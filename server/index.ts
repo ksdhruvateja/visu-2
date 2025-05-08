@@ -1,22 +1,10 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic } from "./vite";
-import cors from "cors";
+import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// Log all incoming requests for debugging
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -41,7 +29,7 @@ app.use((req, res, next) => {
         logLine = logLine.slice(0, 79) + "…";
       }
 
-      console.log(logLine);
+      log(logLine);
     }
   });
 
@@ -72,7 +60,11 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
-  server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+  server.listen({
+    port,
+    host: "0.0.0.0",
+    reusePort: true,
+  }, () => {
+    log(`serving on port ${port}`);
   });
 })();
