@@ -43,6 +43,8 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
         max: d3.max(range.values) || 0,
         q1: d3.quantile(range.values.sort((a, b) => a - b), 0.25) || 0,
         q3: d3.quantile(range.values.sort((a, b) => a - b), 0.75) || 0,
+        yoyGrowth: range.yoyGrowth || 0, // Added yoyGrowth
+        skillPremium: range.skillPremium || 0 // Added skillPremium
       }))
       .sort((a, b) => b.median - a.median);
 
@@ -79,7 +81,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .style('text-anchor', 'end')
       .style('font-size', '10px')
       .style('fill', '#e2e8f0');
-    
+
     // Style the axis lines
     g.selectAll('.x-axis path, .x-axis line')
       .style('stroke', '#4b5563');
@@ -108,7 +110,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
         };
         return jobColors[d as string] || '#e2e8f0';
       });
-    
+
     // Style the axis lines
     g.selectAll('.y-axis path, .y-axis line')
       .style('stroke', '#4b5563');
@@ -167,15 +169,15 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           .attr('x2', '100%')
           .attr('y1', '0%')
           .attr('y2', '0%');
-        
+
         gradient.append('stop')
           .attr('offset', '0%')
           .attr('stop-color', '#0ea5e9');
-        
+
         gradient.append('stop')
           .attr('offset', '100%')
           .attr('stop-color', '#8b5cf6');
-        
+
         return `url(#${gradientId})`;
       })
       .attr('rx', 2)
@@ -217,7 +219,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           .select('rect:nth-child(2)')
           .attr('opacity', 1)
           .style('filter', 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))');
-        
+
         // Show tooltip with statistics
         tooltip
           .style('opacity', 1)
@@ -227,6 +229,20 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
             <div>Q1-Q3: ${formatCurrency(d.q1)} - ${formatCurrency(d.q3)}</div>
             <div>Range: ${formatCurrency(d.min)} - ${formatCurrency(d.max)}</div>
             <div class="mt-1 text-xs text-gray-300">Based on ${d.count} job postings</div>
+            <div class="mt-2 pt-2 border-t border-gray-700">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-gray-400">YoY Growth</span>
+                <span class="${d.yoyGrowth >= 0 ? 'text-green-400' : 'text-red-400'} text-xs font-medium">
+                  ${d.yoyGrowth > 0 ? '+' : ''}${d.yoyGrowth.toFixed(1)}%
+                </span>
+              </div>
+              <div class="flex items-center justify-between mt-1">
+                <span class="text-xs text-gray-400">Skill Premium</span>
+                <span class="text-blue-400 text-xs font-medium">
+                  +${d.skillPremium.toFixed(1)}%
+                </span>
+              </div>
+            </div>
           `);
       })
       .on('mousemove', function(event) {
@@ -240,7 +256,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           .select('rect:nth-child(2)')
           .attr('opacity', 0.8)
           .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))');
-        
+
         tooltip.style('opacity', 0);
       });
 
@@ -253,7 +269,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('fill', '#94a3b8')
       .attr('font-size', '8px')
       .text(d => formatCurrency(d.min));
-    
+
     jobGroups.append('text')
       .attr('x', d => x(d.max) + 5)
       .attr('y', y.bandwidth() / 2)
