@@ -62,9 +62,9 @@ app.use((req, res, next) => {
   const port = 5000;
   server.listen({
     port,
-    host: "0.0.0.0",
+    host: "localhost", //Changed to localhost
     reusePort: true,
   }, () => {
-    log(`serving on port ${port}`);
+    log(`serving on http://localhost:${port}`); // Changed console message
   });
 })();
