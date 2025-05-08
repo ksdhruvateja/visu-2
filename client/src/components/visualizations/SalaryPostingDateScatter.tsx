@@ -15,6 +15,8 @@ export default function SalaryPostingDateScatter({ data, isLoading }: SalaryPost
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [showTrendLine, setShowTrendLine] = useState(true);
   const [groupByIndustry, setGroupByIndustry] = useState(false);
+  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
+  const [redrawTrigger, setRedrawTrigger] = useState(0);
 
   useEffect(() => {
     if (isLoading || !data || !data.points.length) return;

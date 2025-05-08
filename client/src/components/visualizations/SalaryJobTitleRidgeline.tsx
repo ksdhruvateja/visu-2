@@ -14,6 +14,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
   const svgRef = useRef<SVGSVGElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [showTopTitles, setShowTopTitles] = useState(true);
+  const [redrawTrigger, setRedrawTrigger] = useState(0);
 
   useEffect(() => {
     if (isLoading || !data || !data.jobTitles.length) return;
@@ -289,7 +290,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [data, isLoading, showTopTitles]);
+  }, [data, isLoading, showTopTitles, redrawTrigger]);
 
   if (isLoading) {
     return (
@@ -335,7 +336,10 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
             size="sm"
             variant="ghost"
             className={`h-6 px-2 py-0 text-xs ${!showTopTitles ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
-            onClick={() => setShowTopTitles(false)}
+            onClick={() => {
+              setShowTopTitles(false);
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
             All
           </Button>
@@ -343,7 +347,10 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
             size="sm"
             variant="ghost"
             className={`h-6 px-2 py-0 text-xs ${showTopTitles ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
-            onClick={() => setShowTopTitles(true)}
+            onClick={() => {
+              setShowTopTitles(true);
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
             Top 10
           </Button>
