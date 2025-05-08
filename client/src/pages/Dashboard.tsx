@@ -34,11 +34,9 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-950 to-gray-900 text-white">
       <Header />
 
-      <main className="container mx-auto px-2 py-2 flex-grow">
-        {/* Dashboard Header - Removed to save space */}
-
-        {/* Visualization Controls */}
-        <div className="relative z-10 mb-2">
+      <main className="container mx-auto px-1 py-1 flex-grow flex flex-col h-screen overflow-hidden">
+        {/* Visualization Controls - more compact */}
+        <div className="z-10">
           <FilterControls
             onFilterChange={handleFilterChange}
             locations={locations || []}
@@ -48,48 +46,56 @@ export default function Dashboard() {
 
         {/* Error message */}
         {error && (
-          <div className="bg-red-900/60 border border-red-700 text-red-200 px-4 py-2 rounded-xl relative mb-2 backdrop-blur-sm text-sm">
-            <strong className="font-bold">Error:</strong>
-            <span className="ml-1"> {error}</span>
+          <div className="bg-red-900/60 border border-red-700 text-red-200 px-2 py-1 rounded-md text-xs my-1">
+            <strong className="font-medium">Error:</strong>
+            <span className="ml-1">{error}</span>
           </div>
         )}
 
-        {/* All Visualizations in a compact grid layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 h-[calc(100vh-5rem)]">
-          {/* Main visualizations in a 4x2 grid */}
-          
+        {/* All Visualizations in a compact grid layout - now full height */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 flex-grow overflow-hidden">
           {/* Row 1: 4 charts */}
-          <SalaryLocationIndustryBarChart
-            data={visualizationData?.groupedBar}
-            isLoading={isLoading}
-          />
+          <div className="h-full">
+            <SalaryLocationIndustryBarChart
+              data={visualizationData?.groupedBar}
+              isLoading={isLoading}
+            />
+          </div>
 
-          <SalaryJobTitleRidgeline
-            data={visualizationData?.ridgeline}
-            isLoading={isLoading}
-          />
+          <div className="h-full">
+            <SalaryJobTitleRidgeline
+              data={visualizationData?.ridgeline}
+              isLoading={isLoading}
+            />
+          </div>
           
-          <SalaryPostingDateScatter
-            data={visualizationData?.scatterPlot}
-            isLoading={isLoading}
-          />
+          <div className="h-full">
+            <SalaryPostingDateScatter
+              data={visualizationData?.scatterPlot}
+              isLoading={isLoading}
+            />
+          </div>
           
-          <JobCountStackedBar
-            data={visualizationData?.stackedBar}
-            isLoading={isLoading}
-          />
+          <div className="h-full">
+            <JobCountStackedBar
+              data={visualizationData?.stackedBar}
+              isLoading={isLoading}
+            />
+          </div>
 
           {/* Row 2: 2 charts - map spanning 3 columns and timeline */}
-          <div className="md:col-span-3">
+          <div className="h-full md:col-span-3">
             <GeographicMapChart 
               isLoading={isLoading}
             />
           </div>
           
-          <JobPostingsTimeLine
-            data={visualizationData?.timeLine}
-            isLoading={isLoading}
-          />
+          <div className="h-full">
+            <JobPostingsTimeLine
+              data={visualizationData?.timeLine}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
       </main>
     </div>

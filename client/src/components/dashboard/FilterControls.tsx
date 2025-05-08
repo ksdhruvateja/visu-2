@@ -103,203 +103,210 @@ export default function FilterControls({ onFilterChange, locations, isLoading = 
   ];
 
   return (
-    <section className="mb-4">
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-4">
-        <h2 className="text-lg font-semibold text-white mb-3 flex items-center">
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-            Advanced Filters
-          </span>
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          {/* Experience Level Filter */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                disabled={isLoading}
-                className="w-full justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
-              >
-                Experience Level
-                <span className="ml-1 rounded-full bg-cyan-600 px-2 py-0.5 text-xs">
-                  {filters.experienceLevels.length || "All"}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-0 bg-gray-800 border-gray-700 text-gray-200">
-              <ScrollArea className="h-60 p-2">
-                <div className="space-y-2">
-                  {experienceLevelOptions.map((level) => (
-                    <div key={level} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`exp-${level.replace(/\s+/g, '-').toLowerCase()}`}
-                        checked={filters.experienceLevels.includes(level)}
-                        onCheckedChange={(checked) => 
-                          handleFilterChange("experienceLevels", level, checked === true)
-                        }
-                      />
-                      <label 
-                        htmlFor={`exp-${level.replace(/\s+/g, '-').toLowerCase()}`}
-                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {level}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </PopoverContent>
-          </Popover>
+    <section className="mb-1">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-md shadow-md overflow-hidden border border-gray-700 p-1">
+        <div className="flex flex-wrap items-center gap-1">
+          <div className="flex items-center pr-2">
+            <span className="text-xs font-medium bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+              Filters
+            </span>
+          </div>
+          
+          <div className="flex flex-wrap gap-1 items-center flex-1">
+            {/* Experience Level Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isLoading}
+                  className="h-6 px-2 py-0 text-xs justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
+                >
+                  Exp
+                  <span className="ml-1 rounded-full bg-cyan-600 px-1.5 py-0 text-[10px]">
+                    {filters.experienceLevels.length || "All"}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0 bg-gray-800 border-gray-700 text-gray-200">
+                <ScrollArea className="h-40 p-2">
+                  <div className="space-y-1">
+                    {experienceLevelOptions.map((level) => (
+                      <div key={level} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`exp-${level.replace(/\s+/g, '-').toLowerCase()}`}
+                          checked={filters.experienceLevels.includes(level)}
+                          onCheckedChange={(checked) => 
+                            handleFilterChange("experienceLevels", level, checked === true)
+                          }
+                        />
+                        <label 
+                          htmlFor={`exp-${level.replace(/\s+/g, '-').toLowerCase()}`}
+                          className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {level}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </PopoverContent>
+            </Popover>
 
-          {/* Location Filter */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                disabled={isLoading}
-                className="w-full justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
-              >
-                Location
-                <span className="ml-1 rounded-full bg-emerald-600 px-2 py-0.5 text-xs">
-                  {filters.locations.length || "All"}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-0 bg-gray-800 border-gray-700 text-gray-200">
-              <ScrollArea className="h-60 p-2">
-                <div className="space-y-2">
-                  {locations.map((location) => (
-                    <div key={location} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`loc-${location.replace(/\s+/g, '-').toLowerCase()}`}
-                        checked={filters.locations.includes(location)}
-                        onCheckedChange={(checked) => 
-                          handleFilterChange("locations", location, checked === true)
-                        }
-                      />
-                      <label 
-                        htmlFor={`loc-${location.replace(/\s+/g, '-').toLowerCase()}`}
-                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {location}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </PopoverContent>
-          </Popover>
+            {/* Location Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isLoading}
+                  className="h-6 px-2 py-0 text-xs justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
+                >
+                  Location
+                  <span className="ml-1 rounded-full bg-emerald-600 px-1.5 py-0 text-[10px]">
+                    {filters.locations.length || "All"}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0 bg-gray-800 border-gray-700 text-gray-200">
+                <ScrollArea className="h-40 p-2">
+                  <div className="space-y-1">
+                    {locations.map((location) => (
+                      <div key={location} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`loc-${location.replace(/\s+/g, '-').toLowerCase()}`}
+                          checked={filters.locations.includes(location)}
+                          onCheckedChange={(checked) => 
+                            handleFilterChange("locations", location, checked === true)
+                          }
+                        />
+                        <label 
+                          htmlFor={`loc-${location.replace(/\s+/g, '-').toLowerCase()}`}
+                          className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {location}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </PopoverContent>
+            </Popover>
 
-          {/* Industry Filter */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                disabled={isLoading}
-                className="w-full justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
-              >
-                Industry
-                <span className="ml-1 rounded-full bg-purple-600 px-2 py-0.5 text-xs">
-                  {filters.industries.length || "All"}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-0 bg-gray-800 border-gray-700 text-gray-200">
-              <ScrollArea className="h-60 p-2">
-                <div className="space-y-2">
-                  {industryOptions.map((industry) => (
-                    <div key={industry} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`ind-${industry.replace(/\s+/g, '-').toLowerCase()}`}
-                        checked={filters.industries.includes(industry)}
-                        onCheckedChange={(checked) => 
-                          handleFilterChange("industries", industry, checked === true)
-                        }
-                      />
-                      <label 
-                        htmlFor={`ind-${industry.replace(/\s+/g, '-').toLowerCase()}`}
-                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {industry}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </PopoverContent>
-          </Popover>
+            {/* Industry Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isLoading}
+                  className="h-6 px-2 py-0 text-xs justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
+                >
+                  Industry
+                  <span className="ml-1 rounded-full bg-purple-600 px-1.5 py-0 text-[10px]">
+                    {filters.industries.length || "All"}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0 bg-gray-800 border-gray-700 text-gray-200">
+                <ScrollArea className="h-40 p-2">
+                  <div className="space-y-1">
+                    {industryOptions.map((industry) => (
+                      <div key={industry} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`ind-${industry.replace(/\s+/g, '-').toLowerCase()}`}
+                          checked={filters.industries.includes(industry)}
+                          onCheckedChange={(checked) => 
+                            handleFilterChange("industries", industry, checked === true)
+                          }
+                        />
+                        <label 
+                          htmlFor={`ind-${industry.replace(/\s+/g, '-').toLowerCase()}`}
+                          className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {industry}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </PopoverContent>
+            </Popover>
 
-          {/* Employment Type Filter */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                disabled={isLoading}
-                className="w-full justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
-              >
-                Employment Type
-                <span className="ml-1 rounded-full bg-orange-600 px-2 py-0.5 text-xs">
-                  {filters.employmentTypes.length || "All"}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-0 bg-gray-800 border-gray-700 text-gray-200">
-              <ScrollArea className="h-60 p-2">
-                <div className="space-y-2">
-                  {employmentTypeOptions.map((type) => (
-                    <div key={type} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`type-${type.replace(/\s+/g, '-').toLowerCase()}`}
-                        checked={filters.employmentTypes.includes(type)}
-                        onCheckedChange={(checked) => 
-                          handleFilterChange("employmentTypes", type, checked === true)
-                        }
-                      />
-                      <label 
-                        htmlFor={`type-${type.replace(/\s+/g, '-').toLowerCase()}`}
-                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {type}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </PopoverContent>
-          </Popover>
+            {/* Employment Type Filter */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isLoading}
+                  className="h-6 px-2 py-0 text-xs justify-between border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
+                >
+                  Type
+                  <span className="ml-1 rounded-full bg-orange-600 px-1.5 py-0 text-[10px]">
+                    {filters.employmentTypes.length || "All"}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0 bg-gray-800 border-gray-700 text-gray-200">
+                <ScrollArea className="h-40 p-2">
+                  <div className="space-y-1">
+                    {employmentTypeOptions.map((type) => (
+                      <div key={type} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`type-${type.replace(/\s+/g, '-').toLowerCase()}`}
+                          checked={filters.employmentTypes.includes(type)}
+                          onCheckedChange={(checked) => 
+                            handleFilterChange("employmentTypes", type, checked === true)
+                          }
+                        />
+                        <label 
+                          htmlFor={`type-${type.replace(/\s+/g, '-').toLowerCase()}`}
+                          className="text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {type}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-1 ml-auto">
+            <Button
+              disabled={isLoading}
+              size="sm"
+              variant="ghost"
+              onClick={handleClearFilters}
+              className="h-6 px-2 py-0 text-xs border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white"
+            >
+              Clear
+            </Button>
+            <Button
+              disabled={isLoading}
+              size="sm"
+              onClick={handleApplyFilters}
+              className="h-6 px-2 py-0 text-xs bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white"
+            >
+              Apply
+            </Button>
+          </div>
         </div>
-
-        {/* Action Buttons */}
-        <div className="flex justify-end gap-2 mt-4">
-          <Button
-            disabled={isLoading}
-            variant="outline"
-            onClick={handleClearFilters}
-            className="border-gray-700 bg-gray-800/60 text-gray-200 hover:bg-gray-700 hover:text-white"
-          >
-            Clear All
-          </Button>
-          <Button
-            disabled={isLoading}
-            onClick={handleApplyFilters}
-            className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white shadow-lg"
-          >
-            Apply Filters
-          </Button>
-        </div>
         
-        {/* Active filters display */}
+        {/* Active filters display (condensed inline) */}
         {(filters.experienceLevels.length > 0 || filters.locations.length > 0 || 
           filters.industries.length > 0 || filters.employmentTypes.length > 0) && (
-          <div className="mt-4">
-            <div className="text-sm text-gray-400 mb-2">Active filters:</div>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-1 pl-1">
+            <div className="flex flex-wrap gap-1 text-[10px]">
               {filters.experienceLevels.map(level => (
                 <Badge key={`exp-${level}`} variant="outline" 
-                  className="bg-blue-900/30 text-blue-300 border-blue-700 flex items-center gap-1 px-2 py-1">
-                  <span className="text-xs">Experience: {level}</span>
+                  className="px-1 py-0 h-4 text-[10px] bg-blue-900/30 text-blue-300 border-blue-700 flex items-center gap-1">
+                  <span>Exp: {level}</span>
                   <X 
-                    className="h-3 w-3 cursor-pointer" 
+                    className="h-2 w-2 cursor-pointer" 
                     onClick={() => removeFilter("experienceLevels", level)}
                   />
                 </Badge>
@@ -307,10 +314,10 @@ export default function FilterControls({ onFilterChange, locations, isLoading = 
               
               {filters.locations.map(location => (
                 <Badge key={`loc-${location}`} variant="outline" 
-                  className="bg-emerald-900/30 text-emerald-300 border-emerald-700 flex items-center gap-1 px-2 py-1">
-                  <span className="text-xs">Location: {location}</span>
+                  className="px-1 py-0 h-4 text-[10px] bg-emerald-900/30 text-emerald-300 border-emerald-700 flex items-center gap-1">
+                  <span>Loc: {location}</span>
                   <X 
-                    className="h-3 w-3 cursor-pointer" 
+                    className="h-2 w-2 cursor-pointer" 
                     onClick={() => removeFilter("locations", location)}
                   />
                 </Badge>
@@ -318,10 +325,10 @@ export default function FilterControls({ onFilterChange, locations, isLoading = 
               
               {filters.industries.map(industry => (
                 <Badge key={`ind-${industry}`} variant="outline" 
-                  className="bg-purple-900/30 text-purple-300 border-purple-700 flex items-center gap-1 px-2 py-1">
-                  <span className="text-xs">Industry: {industry}</span>
+                  className="px-1 py-0 h-4 text-[10px] bg-purple-900/30 text-purple-300 border-purple-700 flex items-center gap-1">
+                  <span>Ind: {industry}</span>
                   <X 
-                    className="h-3 w-3 cursor-pointer" 
+                    className="h-2 w-2 cursor-pointer" 
                     onClick={() => removeFilter("industries", industry)}
                   />
                 </Badge>
@@ -329,10 +336,10 @@ export default function FilterControls({ onFilterChange, locations, isLoading = 
               
               {filters.employmentTypes.map(type => (
                 <Badge key={`type-${type}`} variant="outline" 
-                  className="bg-orange-900/30 text-orange-300 border-orange-700 flex items-center gap-1 px-2 py-1">
-                  <span className="text-xs">Type: {type}</span>
+                  className="px-1 py-0 h-4 text-[10px] bg-orange-900/30 text-orange-300 border-orange-700 flex items-center gap-1">
+                  <span>Type: {type}</span>
                   <X 
-                    className="h-3 w-3 cursor-pointer" 
+                    className="h-2 w-2 cursor-pointer" 
                     onClick={() => removeFilter("employmentTypes", type)}
                   />
                 </Badge>
