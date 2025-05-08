@@ -86,11 +86,11 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('transform', 'translate(-10,5)rotate(-45)')
       .style('text-anchor', 'end')
       .style('font-size', '10px')
-      .style('fill', '#e2e8f0');
+      .style('fill', '#ffffff');
 
     // Style the axis lines
     g.selectAll('.x-axis path, .x-axis line')
-      .style('stroke', '#4b5563');
+      .style('stroke', '#ffffff');
 
     // Add Y axis with more distinct job title styling and improved visibility
     g.append('g')
@@ -99,27 +99,9 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .selectAll('text')
       .style('font-size', '11px')
       .style('font-weight', 'bold')
+      .style('fill', '#ffffff')
       .attr('x', -10) // Move labels to the left to ensure visibility
-      .style('fill', (d) => {
-        // Create unique colors for each job title
-        const jobColors = {
-          'Data Scientist': '#38bdf8',
-          'Software Engineer': '#a78bfa',
-          'Product Manager': '#f87171',
-          'UX Designer': '#4ade80',
-          'Marketing Analyst': '#fb923c',
-          'Financial Analyst': '#facc15',
-          'Business Analyst': '#34d399',
-          'DevOps Engineer': '#f472b6',
-          'Sales Manager': '#60a5fa',
-          'HR Manager': '#c084fc'
-        };
-        return jobColors[d as string] || '#e2e8f0';
-      });
 
-    // Style the axis lines
-    g.selectAll('.y-axis path, .y-axis line')
-      .style('stroke', '#4b5563');
 
     // Add title
     g.append('text')
@@ -304,6 +286,18 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('font-size', '10px')
       .text('Circle size = Job count');
 
+    // Add growth indicators if showGrowth is true
+    if (showGrowth) {
+      jobGroups.append('text')
+        .attr('x', width + 30)
+        .attr('y', y.bandwidth() / 2)
+        .attr('text-anchor', 'start')
+        .attr('alignment-baseline', 'middle')
+        .attr('fill', d => d.yoyGrowth >= 0 ? '#4ade80' : '#f87171')
+        .attr('font-size', '10px')
+        .text(d => `${d.yoyGrowth > 0 ? '+' : ''}${d.yoyGrowth.toFixed(1)}%`);
+    }
+
     // Add responsive resize handler
     const handleResize = () => {
       // This would normally redraw the chart on resize
@@ -312,7 +306,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [data, isLoading, showTopTitles, redrawTrigger]);
+  }, [data, isLoading, showTopTitles, redrawTrigger, showGrowth]);
 
   if (isLoading) {
     return (
