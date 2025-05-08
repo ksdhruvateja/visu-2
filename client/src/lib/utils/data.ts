@@ -7,7 +7,7 @@ import {
   ScatterPlotData,
   StackedBarData,
   TimeLineData
-} from '@/types';
+} from '../../types';
 
 // Utility function to format currency
 export const formatCurrency = (value: number): string => {

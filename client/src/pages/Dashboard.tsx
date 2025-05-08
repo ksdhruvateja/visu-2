@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/layout/Header";
 import FilterControls from "../components/dashboard/FilterControls";
 import SalaryExperienceBoxPlot from "../components/visualizations/SalaryExperienceBoxPlot";
@@ -20,11 +20,23 @@ export default function Dashboard() {
   });
 
   const {
+    data,
     visualizationData,
     isLoading,
     error,
     locations,
   } = useEmploymentData(filters);
+
+  // Debug logging to verify data loading
+  useEffect(() => {
+    if (data) {
+      console.log("Dashboard received employment data:", data);
+      console.log("Visualizations data:", visualizationData);
+    }
+    if (error) {
+      console.error("Dashboard error:", error);
+    }
+  }, [data, visualizationData, error]);
 
   const handleFilterChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
@@ -49,6 +61,16 @@ export default function Dashboard() {
           <div className="bg-red-900/60 border border-red-700 text-red-200 px-2 py-1 mx-1 rounded-md text-xs">
             <strong className="font-medium">Error:</strong>
             <span className="ml-1">{error}</span>
+          </div>
+        )}
+
+        {/* No data message */}
+        {!isLoading && !visualizationData && !error && (
+          <div className="flex items-center justify-center h-32 my-4">
+            <div className="bg-gray-800/60 border border-gray-700 text-gray-300 px-4 py-3 rounded-md">
+              <h3 className="text-lg font-semibold mb-1">No Visualization Data Available</h3>
+              <p>Try adjusting your filters or check the network connection.</p>
+            </div>
           </div>
         )}
 

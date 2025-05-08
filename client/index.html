@@ -1,20 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Employment Data Insights | Interactive Visualization Dashboard</title>
-    <meta name="description" content="Comprehensive employment market analytics and visualization tools to guide your career decisions and recruitment strategies. Explore salary trends, job distribution, and market insights." />
-    <!-- Open Graph tags -->
-    <meta property="og:title" content="Employment Data Insights Dashboard" />
-    <meta property="og:description" content="Interactive employment data visualizations to help job seekers, recruiters, and policymakers make informed decisions." />
-    <meta property="og:type" content="website" />
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employment Data Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f172a, #1e293b);
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .card {
+      background: rgba(30, 41, 59, 0.7);
+      border-radius: 8px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+    }
+    .stat-value {
+      background: linear-gradient(to right, #38bdf8, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen p-4">
+    <header class="mb-6">
+      <h1 class="text-2xl font-bold">Employment Data Dashboard</h1>
+      <p class="text-gray-400">Interactive visualization of job market trends</p>
+    </header>
+
+    <div class="mb-4 card p-4">
+      <h2 class="text-lg font-semibold mb-2">Dashboard Stats</h2>
+      <div id="stats" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-3 bg-gray-800 rounded">
+          <p class="text-gray-400 text-sm">Total Jobs</p>
+          <p id="totalJobs" class="stat-value text-xl font-bold">Loading...</p>
+        </div>
+        <div class="p-3 bg-gray-800 rounded">
+          <p class="text-gray-400 text-sm">Average Salary</p>
+          <p id="avgSalary" class="stat-value text-xl font-bold">Loading...</p>
+        </div>
+        <div class="p-3 bg-gray-800 rounded">
+          <p class="text-gray-400 text-sm">Top Location</p>
+          <p id="topLocation" class="stat-value text-xl font-bold">Loading...</p>
+        </div>
+        <div class="p-3 bg-gray-800 rounded">
+          <p class="text-gray-400 text-sm">Top Industry</p>
+          <p id="topIndustry" class="stat-value text-xl font-bold">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4 card p-4">
+      <h2 class="text-lg font-semibold mb-2">Recent Job Listings</h2>
+      <div id="jobsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="animate-pulse bg-gray-800 rounded p-4 h-24"></div>
+        <div class="animate-pulse bg-gray-800 rounded p-4 h-24"></div>
+        <div class="animate-pulse bg-gray-800 rounded p-4 h-24"></div>
+        <div class="animate-pulse bg-gray-800 rounded p-4 h-24"></div>
+      </div>
+    </div>
+
+    <div class="card p-4">
+      <h2 class="text-lg font-semibold mb-2">API Response</h2>
+      <pre id="apiResponse" class="bg-gray-800 p-4 rounded overflow-auto max-h-60 text-xs">Loading API data...</pre>
+    </div>
+  </div>
+
+  <script>
+    // Utility function to format currency
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    // Function to fetch data and update the dashboard
+    async function fetchData() {
+      try {
+        const apiUrl = '/api/employment-data';
+        console.log('Fetching data from:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('API data received:', data);
+
+        // Update API response display
+        document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
+
+        // Update stats
+        if (data.stats) {
+          document.getElementById('totalJobs').textContent = data.stats.totalJobs.toLocaleString();
+          document.getElementById('avgSalary').textContent = formatCurrency(data.stats.avgSalary);
+          document.getElementById('topLocation').textContent = data.stats.topLocation.name;
+          document.getElementById('topIndustry').textContent = data.stats.topIndustry.name;
+        }
+
+        // Update job listings
+        if (data.jobs && data.jobs.length) {
+          const jobsContainer = document.getElementById('jobsContainer');
+          jobsContainer.innerHTML = '';
+          
+          data.jobs.slice(0, 4).forEach(job => {
+            const jobEl = document.createElement('div');
+            jobEl.className = 'bg-gray-800 rounded p-4';
+            jobEl.innerHTML = `
+              <h3 class="font-semibold text-blue-300">${job.jobTitle}</h3>
+              <p class="text-sm text-gray-400">${job.companyName} • ${job.location}</p>
+              <div class="flex justify-between mt-2">
+                <span class="text-gray-400 text-xs">${job.industry}</span>
+                <span class="text-green-400 font-semibold">${formatCurrency(job.salary)}</span>
+              </div>
+            `;
+            jobsContainer.appendChild(jobEl);
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        document.getElementById('apiResponse').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    // Fetch data when the page loads
+    document.addEventListener('DOMContentLoaded', fetchData);
+  </script>
+</body>
 </html>
