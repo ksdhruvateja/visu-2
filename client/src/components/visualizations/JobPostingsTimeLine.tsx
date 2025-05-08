@@ -395,22 +395,16 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-        <div className="p-4 border-b border-gray-700">
-          <Skeleton className="h-6 w-3/4 bg-gray-700" />
-          <Skeleton className="h-4 w-1/2 mt-2 bg-gray-700" />
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+          <Skeleton className="h-5 w-1/3 bg-gray-700" />
+          <div className="flex items-center space-x-1">
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+          </div>
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-end mb-4 space-x-2">
-            <Skeleton className="h-6 w-16 bg-gray-700" />
-            <Skeleton className="h-6 w-16 bg-gray-700" />
-            <Skeleton className="h-6 w-20 bg-gray-700" />
-          </div>
-          <Skeleton className="h-64 sm:h-80 w-full bg-gray-700" />
-          <div className="mt-4">
-            <Skeleton className="h-3 w-full bg-gray-700" />
-            <Skeleton className="h-3 w-4/5 mt-2 bg-gray-700" />
-          </div>
+        <div className="p-2 flex-grow">
+          <Skeleton className="h-full w-full bg-gray-700/50 rounded" />
         </div>
       </div>
     );
@@ -419,79 +413,65 @@ export default function JobPostingsTimeLine({ data, isLoading }: JobPostingsTime
   // Handle the case when data is undefined
   if (!data || !data.experienceLevels || !data.timePoints) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-6 text-center">
-        <div className="p-8">
-          <span className="material-icons text-red-400 text-4xl mb-4">error_outline</span>
-          <h3 className="text-white font-bold text-lg mb-2">No Data Available</h3>
-          <p className="text-gray-400">Unable to load timeline data. Please try again later.</p>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700">
+          <h3 className="text-sm font-semibold text-gray-400">Job Posting Trends</h3>
+        </div>
+        <div className="flex-grow flex items-center justify-center">
+          <div className="text-center p-4">
+            <div className="text-red-400 text-sm mb-1">No Data Available</div>
+            <p className="text-gray-500 text-xs">Try adjusting your filters</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-semibold flex items-center text-white">
-          <span className="material-icons text-cyan-400 mr-2">timeline</span>
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
-            Job Postings Over Time
-          </span>
-        </h2>
-        <p className="text-sm text-gray-400">Multi-line chart tracking job posting trends by experience level</p>
-      </div>
-      <div className="p-4">
-        <div className="flex items-center justify-end mb-4 space-x-2">
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+      <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+        <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          Job Posting Trends
+        </h3>
+        <div className="flex items-center gap-1">
           <Button
             size="sm"
-            variant="outline"
-            className={`${
-              timeInterval === 'Weekly'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${timeInterval === 'Weekly' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setTimeInterval('Weekly')}
           >
-            Weekly
+            W
           </Button>
           <Button
             size="sm"
-            variant="outline"
-            className={`${
-              timeInterval === 'Monthly'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${timeInterval === 'Monthly' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setTimeInterval('Monthly')}
           >
-            Monthly
+            M
           </Button>
           <Button
             size="sm"
-            variant="outline"
-            className={`${
-              timeInterval === 'Quarterly'
-                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
-                : 'bg-gray-800/50 text-gray-400 border-gray-700'
-            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
+            variant="ghost"
+            className={`h-6 px-2 py-0 text-xs ${timeInterval === 'Quarterly' ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
             onClick={() => setTimeInterval('Quarterly')}
           >
-            Quarterly
+            Q
           </Button>
         </div>
-        <div className="relative">
+      </div>
+      <div className="p-2 flex-grow flex flex-col">
+        <div className="relative flex-grow">
           <svg 
             ref={svgRef} 
-            className="h-64 sm:h-80 w-full border border-gray-700 rounded-lg bg-gray-800"
+            width="100%" 
+            height="100%" 
+            className="bg-gray-800/30 rounded"
           ></svg>
           <div 
             ref={tooltipRef}
-            className="absolute opacity-0 bg-gray-900 p-3 rounded shadow-xl border border-gray-700 text-sm pointer-events-none z-10 text-white"
+            className="absolute opacity-0 bg-gray-900 p-2 rounded shadow-xl border border-gray-700 text-xs pointer-events-none z-10 text-white"
           ></div>
-        </div>
-        <div className="mt-4 text-xs text-gray-400">
-          <p>Use the brush tool below the chart to zoom into specific time periods.</p>
-          <p>Click on legend items to toggle experience level visibility.</p>
         </div>
       </div>
     </div>

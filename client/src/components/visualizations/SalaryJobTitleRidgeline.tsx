@@ -292,21 +292,15 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
-        <div className="p-4 border-b border-gray-700">
-          <Skeleton className="h-6 w-3/4 bg-gray-700" />
-          <Skeleton className="h-4 w-1/2 mt-2 bg-gray-700" />
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700 flex items-center justify-between">
+          <Skeleton className="h-5 w-1/3 bg-gray-700" />
+          <div className="flex items-center space-x-1">
+            <Skeleton className="h-5 w-14 bg-gray-700" />
+          </div>
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-end mb-4 space-x-2">
-            <Skeleton className="h-6 w-20 bg-gray-700" />
-            <Skeleton className="h-6 w-24 bg-gray-700" />
-          </div>
-          <Skeleton className="h-64 sm:h-80 w-full bg-gray-700" />
-          <div className="mt-4">
-            <Skeleton className="h-3 w-full bg-gray-700" />
-            <Skeleton className="h-3 w-4/5 mt-2 bg-gray-700" />
-          </div>
+        <div className="p-2 flex-grow">
+          <Skeleton className="h-full w-full bg-gray-700/50 rounded" />
         </div>
       </div>
     );
@@ -315,11 +309,15 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
   // Handle the case when data is undefined
   if (!data || !data.jobTitles || data.jobTitles.length === 0) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-6 text-center">
-        <div className="p-8">
-          <span className="material-icons text-red-400 text-4xl mb-4">error_outline</span>
-          <h3 className="text-white font-bold text-lg mb-2">No Data Available</h3>
-          <p className="text-gray-400">Unable to load salary distribution data. Please try again later.</p>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+        <div className="p-2 border-b border-gray-700">
+          <h3 className="text-sm font-semibold text-gray-400">Salary by Job Title</h3>
+        </div>
+        <div className="flex-grow flex items-center justify-center">
+          <div className="text-center p-4">
+            <div className="text-red-400 text-sm mb-1">No Data Available</div>
+            <p className="text-gray-500 text-xs">Try adjusting your filters</p>
+          </div>
         </div>
       </div>
     );

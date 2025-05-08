@@ -100,15 +100,17 @@ export default function Dashboard() {
           />
 
           {/* Additional space for future visualization if needed */}
-          <div className="hidden md:block bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg border border-gray-700 p-4">
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-xl font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text mb-2">
-                  Future Insights
-                </div>
-                <p className="text-gray-400 text-sm">
+          <div className="hidden md:block bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow overflow-hidden border border-gray-700 h-full flex flex-col">
+            <div className="p-2 border-b border-gray-700">
+              <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+                Future Insights
+              </h3>
+            </div>
+            <div className="flex-grow flex items-center justify-center">
+              <div className="text-center p-4">
+                <div className="text-gray-400 text-xs">
                   Additional visualization space
-                </p>
+                </div>
               </div>
             </div>
           </div>
