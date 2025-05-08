@@ -14,6 +14,8 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
   const svgRef = useRef<SVGSVGElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [showTopTitles, setShowTopTitles] = useState(true);
+  const [sortBy, setSortBy] = useState<'median'|'count'|'name'>('median');
+  const [showGrowth, setShowGrowth] = useState(false);
   const [redrawTrigger, setRedrawTrigger] = useState(0);
 
   useEffect(() => {
@@ -46,7 +48,11 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
         yoyGrowth: range.yoyGrowth || 0, // Added yoyGrowth
         skillPremium: range.skillPremium || 0 // Added skillPremium
       }))
-      .sort((a, b) => b.median - a.median);
+      .sort((a, b) => {
+        if (sortBy === 'median') return b.median - a.median;
+        if (sortBy === 'count') return b.count - a.count;
+        return a.title.localeCompare(b.title);
+      });
 
     // Select job titles to display (top 10 if showTopTitles is true, or max 20 for "All")
     const displayedTitles = showTopTitles
@@ -374,16 +380,22 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           <Button
             size="sm"
             variant="ghost"
-            className="h-6 px-2 py-0 text-xs"
-            onClick={() => setRedrawTrigger(prev => prev + 1)}
+            className={`h-6 px-2 py-0 text-xs ${sortBy !== 'median' ? 'bg-blue-900/30 text-blue-400' : ''}`}
+            onClick={() => {
+              setSortBy(current => current === 'median' ? 'count' : current === 'count' ? 'name' : 'median');
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
-            Sort
+            Sort: {sortBy === 'median' ? 'Salary' : sortBy === 'count' ? 'Count' : 'Name'}
           </Button>
           <Button
             size="sm"
             variant="ghost"
-            className="h-6 px-2 py-0 text-xs"
-            onClick={() => setRedrawTrigger(prev => prev + 1)}
+            className={`h-6 px-2 py-0 text-xs ${showGrowth ? 'bg-blue-900/30 text-blue-400' : ''}`}
+            onClick={() => {
+              setShowGrowth(!showGrowth);
+              setRedrawTrigger(prev => prev + 1);
+            }}
           >
             Growth
           </Button>
