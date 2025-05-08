@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { StackedBarData } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 interface JobCountStackedBarProps {
   data: StackedBarData | undefined;
@@ -185,61 +186,88 @@ export default function JobCountStackedBar({ data, isLoading }: JobCountStackedB
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-4 border-b border-gray-200">
-          <Skeleton className="h-6 w-3/4" />
-          <Skeleton className="h-4 w-1/2 mt-2" />
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+        <div className="p-4 border-b border-gray-700">
+          <Skeleton className="h-6 w-3/4 bg-gray-700" />
+          <Skeleton className="h-4 w-1/2 mt-2 bg-gray-700" />
         </div>
         <div className="p-4">
           <div className="flex items-center justify-end mb-4 space-x-2">
-            <Skeleton className="h-6 w-20" />
-            <Skeleton className="h-6 w-28" />
+            <Skeleton className="h-6 w-20 bg-gray-700" />
+            <Skeleton className="h-6 w-28 bg-gray-700" />
           </div>
-          <Skeleton className="h-64 sm:h-80 w-full" />
+          <Skeleton className="h-64 sm:h-80 w-full bg-gray-700" />
           <div className="mt-4">
-            <Skeleton className="h-3 w-full" />
-            <Skeleton className="h-3 w-4/5 mt-2" />
+            <Skeleton className="h-3 w-full bg-gray-700" />
+            <Skeleton className="h-3 w-4/5 mt-2 bg-gray-700" />
           </div>
         </div>
       </div>
     );
   }
 
+  // Handle the case when data is undefined
+  if (!data || !data.industries || data.industries.length === 0) {
+    return (
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 p-6 text-center">
+        <div className="p-8">
+          <span className="material-icons text-red-400 text-4xl mb-4">error_outline</span>
+          <h3 className="text-white font-bold text-lg mb-2">No Data Available</h3>
+          <p className="text-gray-400">Unable to load job count data. Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold flex items-center">
-          <span className="material-icons text-primary mr-2">stacked_bar_chart</span>
-          Job Count by Industry and Employment Type
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+      <div className="p-4 border-b border-gray-700">
+        <h2 className="text-lg font-semibold flex items-center text-white">
+          <span className="material-icons text-cyan-400 mr-2">stacked_bar_chart</span>
+          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+            Job Count by Industry and Employment Type
+          </span>
         </h2>
-        <p className="text-sm text-gray-500">Stacked bar chart displaying job counts across industries</p>
+        <p className="text-sm text-gray-400">Stacked bar chart displaying job counts across industries</p>
       </div>
       <div className="p-4">
         <div className="flex items-center justify-end mb-4 space-x-2">
-          <button 
-            className={`text-xs ${activeEmploymentType === null ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700'} py-1 px-2 rounded hover:bg-gray-200 transition`}
+          <Button 
+            size="sm"
+            variant="outline"
+            className={`${
+              activeEmploymentType === null
+                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
+                : 'bg-gray-800/50 text-gray-400 border-gray-700'
+            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
             onClick={() => setActiveEmploymentType(null)}
           >
             All Types
-          </button>
-          <button 
-            className={`text-xs ${activeEmploymentType !== null ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700'} py-1 px-2 rounded hover:bg-gray-200 transition`}
+          </Button>
+          <Button 
+            size="sm"
+            variant="outline"
+            className={`${
+              activeEmploymentType !== null
+                ? 'bg-blue-900/50 text-blue-400 border-blue-700'
+                : 'bg-gray-800/50 text-gray-400 border-gray-700'
+            } hover:bg-blue-800/30 hover:text-blue-300 transition-all duration-200`}
             onClick={() => setActiveEmploymentType(activeEmploymentType === null ? 'Full-time' : activeEmploymentType)}
           >
             By Employment Type
-          </button>
+          </Button>
         </div>
         <div className="relative">
           <svg 
             ref={svgRef} 
-            className="h-64 sm:h-80 w-full border border-gray-200 rounded-lg bg-gray-50"
+            className="h-64 sm:h-80 w-full border border-gray-700 rounded-lg bg-gray-800"
           ></svg>
           <div 
             ref={tooltipRef}
-            className="absolute opacity-0 bg-white p-2 rounded shadow-lg border border-gray-200 text-sm pointer-events-none z-10"
+            className="absolute opacity-0 bg-gray-900 p-3 rounded shadow-xl border border-gray-700 text-sm pointer-events-none z-10 text-white"
           ></div>
         </div>
-        <div className="mt-4 text-xs text-gray-500">
+        <div className="mt-4 text-xs text-gray-400">
           <p>Click on bar segments to filter by employment type.</p>
           <p>Hover over segments to see detailed job counts.</p>
         </div>
