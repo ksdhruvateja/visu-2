@@ -42,14 +42,35 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .map(([title, range]) => {
         // Sort values once for all quantile calculations
         const sortedValues = [...range.values].sort((a, b) => a - b);
+        
+        // For ranges with only one value, we handle quartiles specially
+        const median = d3.median(sortedValues) || sortedValues[0] || 0;
+        let min = sortedValues[0] || 0;
+        let max = sortedValues[sortedValues.length - 1] || 0;
+        
+        // If there's only one value, create an artificial range
+        if (sortedValues.length === 1) {
+          min = median * 0.9;
+          max = median * 1.1;
+        }
+        
+        // Calculate or approximate quartiles
+        const q1 = sortedValues.length > 2 
+          ? d3.quantile(sortedValues, 0.25) || min
+          : min + (median - min) / 2;
+          
+        const q3 = sortedValues.length > 2 
+          ? d3.quantile(sortedValues, 0.75) || max
+          : median + (max - median) / 2;
+          
         return {
           title,
-          median: d3.median(sortedValues) || 0,
+          median,
           count: range.values.length,
-          min: sortedValues[0] || 0,
-          max: sortedValues[sortedValues.length - 1] || 0,
-          q1: d3.quantile(sortedValues, 0.25) || 0,
-          q3: d3.quantile(sortedValues, 0.75) || 0,
+          min,
+          max,
+          q1,
+          q3,
         };
       })
       .sort((a, b) => b.median - a.median);
@@ -104,6 +125,22 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
     g.selectAll('.x-axis path, .x-axis line')
       .style('stroke', '#4b5563');
 
+    // Create a consistent color map for all job titles with fallback
+    const jobColors: Record<string, string> = {
+      'Data Scientist': '#38bdf8',
+      'Software Engineer': '#a78bfa',
+      'Full Stack Developer': '#10b981',
+      'Product Manager': '#f87171',
+      'UX Designer': '#4ade80',
+      'Marketing Analyst': '#fb923c',
+      'Financial Analyst': '#facc15',
+      'Business Analyst': '#34d399',
+      'DevOps Engineer': '#f472b6',
+      'Sales Manager': '#60a5fa',
+      'HR Manager': '#c084fc',
+      'AI Engineer': '#8b5cf6'
+    };
+    
     // Add Y axis with more distinct job title styling and improved visibility
     g.append('g')
       .attr('class', 'y-axis')
@@ -112,21 +149,13 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .style('font-size', '11px')
       .style('font-weight', 'bold')
       .attr('x', -10) // Move labels to the left to ensure visibility
-      .style('fill', (d) => {
-        // Create unique colors for each job title
-        const jobColors = {
-          'Data Scientist': '#38bdf8',
-          'Software Engineer': '#a78bfa',
-          'Product Manager': '#f87171',
-          'UX Designer': '#4ade80',
-          'Marketing Analyst': '#fb923c',
-          'Financial Analyst': '#facc15',
-          'Business Analyst': '#34d399',
-          'DevOps Engineer': '#f472b6',
-          'Sales Manager': '#60a5fa',
-          'HR Manager': '#c084fc'
-        };
-        return jobColors[d as string] || '#e2e8f0';
+      .style('fill', d => {
+        // Map the job title to a color, or use a default white-ish color
+        try {
+          return jobColors[d as string] || '#e2e8f0';
+        } catch (error) {
+          return '#e2e8f0'; // Fallback color
+        }
       });
     
     // Style the axis lines
@@ -148,10 +177,15 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
 
     // Function to generate gradient color based on salary
     const getGradientColor = (salary: number) => {
-      const colorScale = d3.scaleLinear<string>()
-        .domain([globalMin, globalMax])
-        .range(['#0ea5e9', '#8b5cf6']);
-      return colorScale(salary);
+      try {
+        const colorScale = d3.scaleLinear<string>()
+          .domain([globalMin, globalMax])
+          .range(['#0ea5e9', '#8b5cf6']);
+        return colorScale(salary);
+      } catch (error) {
+        console.error("Error generating color:", error);
+        return '#0ea5e9'; // Fallback color
+      }
     };
 
     // Create a group for each job title
@@ -171,33 +205,33 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('fill', '#334155')
       .attr('rx', 2);
 
+    // Create a single gradient that all rectangles can use
+    const defs = svg.append('defs');
+    const gradientId = 'salary-gradient';
+    
+    // Create the gradient once
+    const gradient = defs.append('linearGradient')
+      .attr('id', gradientId)
+      .attr('x1', '0%')
+      .attr('x2', '100%')
+      .attr('y1', '0%')
+      .attr('y2', '0%');
+    
+    gradient.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#0ea5e9');
+    
+    gradient.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#8b5cf6');
+    
     // Add the IQR box (Q1 to Q3)
     jobGroups.append('rect')
       .attr('x', d => x(d.q1))
       .attr('y', d => y.bandwidth() / 4)
-      .attr('width', d => x(d.q3) - x(d.q1))
+      .attr('width', d => Math.max(x(d.q3) - x(d.q1), 1)) // Ensure minimum width of 1px
       .attr('height', y.bandwidth() / 2)
-      .attr('fill', d => {
-        // Create a linear gradient for the IQR box
-        const gradientId = `gradient-${d.title.replace(/\s+/g, '-').toLowerCase()}`;
-        const gradient = svg.append('defs')
-          .append('linearGradient')
-          .attr('id', gradientId)
-          .attr('x1', '0%')
-          .attr('x2', '100%')
-          .attr('y1', '0%')
-          .attr('y2', '0%');
-        
-        gradient.append('stop')
-          .attr('offset', '0%')
-          .attr('stop-color', '#0ea5e9');
-        
-        gradient.append('stop')
-          .attr('offset', '100%')
-          .attr('stop-color', '#8b5cf6');
-        
-        return `url(#${gradientId})`;
-      })
+      .attr('fill', `url(#${gradientId})`) // Use the same gradient for all
       .attr('rx', 2)
       .attr('opacity', 0.8)
       .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))');
@@ -250,18 +284,41 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
           `);
       })
       .on('mousemove', function(event) {
-        tooltip
-          .style('left', `${event.pageX + 15}px`)
-          .style('top', `${event.pageY - 20}px`);
+        try {
+          // Calculate tooltip position to stay in viewport
+          const tooltipWidth = 200; // Approximate width
+          const tooltipHeight = 150; // Approximate height
+          
+          // Calculate position to ensure tooltip stays in viewport
+          const leftPos = Math.min(
+            event.pageX + 15,
+            window.innerWidth - tooltipWidth - 20
+          );
+          
+          const topPos = Math.min(
+            event.pageY - 20,
+            window.innerHeight - tooltipHeight - 20
+          );
+          
+          tooltip
+            .style('left', `${leftPos}px`)
+            .style('top', `${topPos}px`);
+        } catch (error) {
+          console.error("Error positioning tooltip:", error);
+        }
       })
       .on('mouseout', function() {
-        // Restore original style
-        d3.select(this.parentNode)
-          .select('rect:nth-child(2)')
-          .attr('opacity', 0.8)
-          .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))');
-        
-        tooltip.style('opacity', 0);
+        try {
+          // Restore original style
+          d3.select(this.parentNode)
+            .select('rect:nth-child(2)')
+            .attr('opacity', 0.8)
+            .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))');
+          
+          tooltip.style('opacity', 0);
+        } catch (error) {
+          console.error("Error resetting tooltip:", error);
+        }
       });
 
     // Add labels for min, median, and max
