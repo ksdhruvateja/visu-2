@@ -341,7 +341,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('y', y.bandwidth() / 2)
       .attr('text-anchor', 'end')
       .attr('alignment-baseline', 'middle')
-      .attr('fill', '#94a3b8')
+      .attr('fill', '#e2e8f0') /* Lighter color for better visibility */
       .attr('font-size', '8px')
       .text(d => formatCurrency(d.min));
     
@@ -350,7 +350,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('y', y.bandwidth() / 2)
       .attr('text-anchor', 'start')
       .attr('alignment-baseline', 'middle')
-      .attr('fill', '#94a3b8')
+      .attr('fill', '#e2e8f0') /* Lighter color for better visibility */
       .attr('font-size', '8px')
       .text(d => formatCurrency(d.max));
 
