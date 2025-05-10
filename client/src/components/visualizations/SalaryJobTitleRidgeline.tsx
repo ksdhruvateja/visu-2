@@ -133,7 +133,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('transform', 'translate(-10,5)rotate(-45)')
       .style('text-anchor', 'end')
       .style('font-size', '10px')
-      .style('fill', '#e2e8f0');
+      .style('fill', '#ffffff');
     
     // Style the axis lines
     g.selectAll('.x-axis path, .x-axis line')
@@ -163,14 +163,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .style('font-size', '11px')
       .style('font-weight', 'bold')
       .attr('x', -10) // Move labels to the left to ensure visibility
-      .style('fill', d => {
-        // Map the job title to a color, or use a default white-ish color
-        try {
-          return jobColors[d as string] || '#e2e8f0';
-        } catch (error) {
-          return '#e2e8f0'; // Fallback color
-        }
-      });
+      .style('fill', '#ffffff'); // Use pure white for all job title labels
     
     // Style the axis lines
     g.selectAll('.y-axis path, .y-axis line')
@@ -341,7 +334,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('y', y.bandwidth() / 2)
       .attr('text-anchor', 'end')
       .attr('alignment-baseline', 'middle')
-      .attr('fill', '#e2e8f0') /* Lighter color for better visibility */
+      .attr('fill', '#ffffff') /* Pure white for best visibility */
       .attr('font-size', '8px')
       .text(d => formatCurrency(d.min));
     
@@ -350,7 +343,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('y', y.bandwidth() / 2)
       .attr('text-anchor', 'start')
       .attr('alignment-baseline', 'middle')
-      .attr('fill', '#e2e8f0') /* Lighter color for better visibility */
+      .attr('fill', '#ffffff') /* Pure white for best visibility */
       .attr('font-size', '8px')
       .text(d => formatCurrency(d.max));
 
@@ -369,7 +362,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('x', width + 15)
       .attr('y', height + 40)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#e2e8f0')  /* Lighter color for better visibility */
+      .attr('fill', '#ffffff')  /* Pure white for best visibility */
       .attr('font-size', '10px')
       .text('Circle size = Job count');
 
