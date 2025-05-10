@@ -290,11 +290,11 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
         tooltip
           .style('opacity', 1)
           .html(`
-            <div class="font-medium text-lg">${d.title}</div>
+            <div class="font-medium text-lg text-white">${d.title}</div>
             <div class="mt-1 text-cyan-300">Median: ${formatCurrency(d.median)}</div>
-            <div>Q1-Q3: ${formatCurrency(d.q1)} - ${formatCurrency(d.q3)}</div>
-            <div>Range: ${formatCurrency(d.min)} - ${formatCurrency(d.max)}</div>
-            <div class="mt-1 text-xs text-gray-300">Based on ${d.count} job postings</div>
+            <div class="text-white">Q1-Q3: ${formatCurrency(d.q1)} - ${formatCurrency(d.q3)}</div>
+            <div class="text-white">Range: ${formatCurrency(d.min)} - ${formatCurrency(d.max)}</div>
+            <div class="mt-1 text-xs text-slate-200">Based on ${d.count} job postings</div>
           `);
       })
       .on('mousemove', function(event) {
@@ -369,7 +369,7 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .attr('x', width + 15)
       .attr('y', height + 40)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#94a3b8')
+      .attr('fill', '#e2e8f0')  /* Lighter color for better visibility */
       .attr('font-size', '10px')
       .text('Circle size = Job count');
 
