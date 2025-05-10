@@ -15,6 +15,20 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [showTopTitles, setShowTopTitles] = useState(true);
   const [redrawTrigger, setRedrawTrigger] = useState(0);
+  
+  // Formatting utilities 
+  const formatSalary = (value: number): string => {
+    return Math.round(value).toLocaleString('en-US');
+  };
+  
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('en-US', { 
+      style: 'currency', 
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  };
 
   useEffect(() => {
     // Make sure we have valid data with job titles and salary ranges
@@ -408,25 +422,37 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
         <h3 className="text-sm font-semibold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
           Salary by Job Title
         </h3>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center space-x-1 rounded overflow-hidden border border-blue-800/60">
           <Button
             size="sm"
-            variant="ghost"
-            className={`h-6 px-2 py-0 text-xs ${!showTopTitles ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
+            variant={showTopTitles ? "ghost" : "secondary"}
+            className={`h-6 px-2 py-0 text-xs rounded-none ${
+              !showTopTitles 
+                ? 'bg-blue-900/70 text-blue-100 hover:bg-blue-900/90' 
+                : 'text-gray-400 hover:bg-gray-800'
+            }`}
             onClick={() => {
-              setShowTopTitles(false);
-              setRedrawTrigger(prev => prev + 1);
+              if (showTopTitles) {
+                setShowTopTitles(false);
+                setRedrawTrigger(prev => prev + 1);
+              }
             }}
           >
-            More
+            All
           </Button>
           <Button
             size="sm"
-            variant="ghost"
-            className={`h-6 px-2 py-0 text-xs ${showTopTitles ? 'bg-blue-900/30 text-blue-400' : 'text-gray-400'}`}
+            variant={!showTopTitles ? "ghost" : "secondary"}
+            className={`h-6 px-2 py-0 text-xs rounded-none ${
+              showTopTitles 
+                ? 'bg-blue-900/70 text-blue-100 hover:bg-blue-900/90' 
+                : 'text-gray-400 hover:bg-gray-800'
+            }`}
             onClick={() => {
-              setShowTopTitles(true);
-              setRedrawTrigger(prev => prev + 1);
+              if (!showTopTitles) {
+                setShowTopTitles(true);
+                setRedrawTrigger(prev => prev + 1);
+              }
             }}
           >
             Top 10
