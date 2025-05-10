@@ -17,7 +17,10 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
   const [redrawTrigger, setRedrawTrigger] = useState(0);
 
   useEffect(() => {
-    if (isLoading || !data || !data.jobTitles.length) return;
+    // Make sure we have valid data with job titles and salary ranges
+    if (isLoading || !data || !data.jobTitles || !data.salaryRanges || data.jobTitles.length === 0) return;
+    
+    console.log("Ridgeline data:", data);
 
     // Clear any existing visualization
     const svg = d3.select(svgRef.current);
@@ -33,30 +36,47 @@ export default function SalaryJobTitleRidgeline({ data, isLoading }: SalaryJobTi
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    // Get the top job titles by salary median
+    // Get the top job titles by salary median with additional error handling
     const jobTitlesByMedian = Object.entries(data.salaryRanges)
-      .map(([title, range]) => ({
-        title,
-        median: d3.median(range.values) || 0,
-        count: range.values.length,
-        min: d3.min(range.values) || 0,
-        max: d3.max(range.values) || 0,
-        q1: d3.quantile(range.values.sort((a, b) => a - b), 0.25) || 0,
-        q3: d3.quantile(range.values.sort((a, b) => a - b), 0.75) || 0,
-      }))
+      .filter(([_, range]) => range && Array.isArray(range.values) && range.values.length > 0)
+      .map(([title, range]) => {
+        // Sort values once for all quantile calculations
+        const sortedValues = [...range.values].sort((a, b) => a - b);
+        return {
+          title,
+          median: d3.median(sortedValues) || 0,
+          count: range.values.length,
+          min: sortedValues[0] || 0,
+          max: sortedValues[sortedValues.length - 1] || 0,
+          q1: d3.quantile(sortedValues, 0.25) || 0,
+          q3: d3.quantile(sortedValues, 0.75) || 0,
+        };
+      })
       .sort((a, b) => b.median - a.median);
+
+    // Check if we have any valid job titles
+    if (jobTitlesByMedian.length === 0) {
+      console.log("No valid job titles found with salary data");
+      return;
+    }
 
     // Select job titles to display (top 10 if showTopTitles is true, or max 20 for "All")
     const displayedTitles = showTopTitles
-      ? jobTitlesByMedian.slice(0, 10) // Top 10 highest paying positions
+      ? jobTitlesByMedian.slice(0, Math.min(10, jobTitlesByMedian.length)) // Top 10 highest paying positions
       : jobTitlesByMedian.slice(0, Math.min(20, jobTitlesByMedian.length)); // Cap at 20 titles for readability
 
-    // Find global min and max for x scale
+    // Find global min and max for x scale with safety checks
     let globalMin = d3.min(displayedTitles, d => d.min) || 0;
     let globalMax = d3.max(displayedTitles, d => d.max) || 100000;
 
+    // Make sure min and max are not equal (to avoid scale issues)
+    if (globalMin === globalMax) {
+      globalMin = globalMin * 0.8;
+      globalMax = globalMax * 1.2;
+    }
+
     // Add some padding to the domain
-    const padding = (globalMax - globalMin) * 0.05;
+    const padding = Math.max((globalMax - globalMin) * 0.05, 1000);
 
     // Create the X scale (horizontal bar positions)
     const x = d3.scaleLinear()

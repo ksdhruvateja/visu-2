@@ -155,22 +155,44 @@ export const processStackedBarData = (jobs: JobListing[]): StackedBarData => {
 
 // Process data for ridgeline plot visualization
 export const processRidgelineData = (jobs: JobListing[]): RidgelineData => {
-  const jobTitles = [...new Set(jobs.map(job => job.jobTitle))];
+  // Guard against empty jobs
+  if (!jobs || jobs.length === 0) {
+    return {
+      jobTitles: [],
+      salaryRanges: {}
+    };
+  }
+
+  // Get unique job titles and filter out any undefined/null values
+  const jobTitles = [...new Set(jobs.map(job => job.jobTitle))].filter(Boolean);
   const salaryRanges: RidgelineData['salaryRanges'] = {};
   
+  // For each job title, collect salary data
   jobTitles.forEach(title => {
-    const titleJobs = jobs.filter(job => job.jobTitle === title);
+    if (!title) return; // Skip empty titles
+    
+    const titleJobs = jobs.filter(job => job.jobTitle === title && typeof job.salary === 'number');
+    
+    // Skip if no jobs with this title or no valid salaries
+    if (titleJobs.length === 0) return;
+    
     const values = titleJobs.map(job => job.salary);
     
-    salaryRanges[title] = {
-      values,
-      min: Math.min(...values),
-      max: Math.max(...values)
-    };
+    // Ensure we have valid values before calculating min/max
+    if (values.length > 0) {
+      salaryRanges[title] = {
+        values,
+        min: Math.min(...values),
+        max: Math.max(...values)
+      };
+    }
   });
   
+  // Only include job titles that have valid salary ranges
+  const validJobTitles = Object.keys(salaryRanges);
+  
   return {
-    jobTitles,
+    jobTitles: validJobTitles,
     salaryRanges
   };
 };
